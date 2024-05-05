@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7f5289449a774edb85d47a9480833785" Name="Diagram1">
+        <EntityTypeShape EntityType="BlinkMovie3Model.BalanceRequests" Width="1.5" PointX="6" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Clips" Width="1.5" PointX="3" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Editor" Width="1.5" PointX="3.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Favorites" Width="1.5" PointX="6" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Genre" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.GetMovie" Width="1.5" PointX="11.25" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.History" Width="1.5" PointX="6" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Interests" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Movie" Width="1.5" PointX="3.75" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Reader" Width="1.5" PointX="3.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.ReaderRate" Width="1.5" PointX="6" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.SentProject" Width="1.5" PointX="3" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.SentProposals" Width="1.5" PointX="3" PointY="18.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Summary" Width="1.5" PointX="9" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Users" Width="1.5" PointX="6" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie3Model.Writer" Width="1.5" PointX="0.75" PointY="13.125" IsExpanded="true" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__BalanceRe__Reade__66603565" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Clips__MID__6383C8BA" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Clips__WID__628FA481" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__GetMovie__CID__6C190EBB" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__SentProject__EID__36B12243" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__SentProposa__EID__24927208" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Users__EID__0CBAE877" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Favorites__MID__7B5B524B" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Favorites__Reade__6A30C649" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Favorites__Write__693CA210" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__GetMovie__MID__693CA210" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__GetMovie__Summar__6C190EBB" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__GetMovie__WID__6A30C649" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__History__MID__02084FDA" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__History__Reader___70DDC3D8" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__History__Writer___6FE99F9F" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__ReaderRate__MID__2C3393D0" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Summary__MID__3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__ReaderRat__Reade__72C60C4A" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Users__RID__0EA330E9" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__ReaderRate__WID__2B3F6F97" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__SentProject__WID__37A5467C" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__SentProposa__WID__25869641" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Summary__WID__403A8C7D" ManuallyRouted="false" />
+        <AssociationConnector Association="BlinkMovie3Model.FK__Users__WID__0DAF0CB0" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
