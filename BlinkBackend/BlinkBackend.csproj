@@ -303,70 +303,73 @@
     <Compile Include="Classes\Log.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Models\BalanceRequests.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Blink1.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Blink1.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Blink1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Blink1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Blink1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Blink1.edmx</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Clips.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DramasClips.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Editor.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Favorites.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FreeMovie.cs">
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Genre.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetMovie.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\History.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Interests.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model7.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model7.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model7.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model7.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model7.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model7.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Movie.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Reader.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ReaderRate.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SentProject.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SentProposals.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Summary.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Users.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Writer.cs">
-      <DependentUpon>Blink1.tt</DependentUpon>
+      <DependentUpon>Model7.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -379,15 +382,15 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Models\Blink1.Context.tt">
+    <Content Include="Models\Model7.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Blink1.edmx</DependentUpon>
-      <LastGenOutput>Blink1.Context.cs</LastGenOutput>
+      <DependentUpon>Model7.edmx</DependentUpon>
+      <LastGenOutput>Model7.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Blink1.tt">
+    <Content Include="Models\Model7.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Blink1.edmx</DependentUpon>
-      <LastGenOutput>Blink1.cs</LastGenOutput>
+      <DependentUpon>Model7.edmx</DependentUpon>
+      <LastGenOutput>Model7.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -411,12 +414,12 @@
     <Content Include="Areas\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Views\Web.config" />
     <Content Include="Areas\Views\_ViewStart.cshtml" />
-    <EntityDeploy Include="Models\Blink1.edmx">
+    <EntityDeploy Include="Models\Model7.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Blink1.Designer.cs</LastGenOutput>
+      <LastGenOutput>Model7.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\Blink1.edmx.diagram">
-      <DependentUpon>Blink1.edmx</DependentUpon>
+    <Content Include="Models\Model7.edmx.diagram">
+      <DependentUpon>Model7.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

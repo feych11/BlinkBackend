@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web;
 using System.Web.Http.Cors;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace BlinkBackend.Controllers
 {
@@ -609,6 +611,187 @@ namespace BlinkBackend.Controllers
             }
         }
 
+        [HttpGet]
+        public HttpResponseMessage IssueFreeMovie(int readerId)
+        {
+            using (BlinkMovie2Entities db = new BlinkMovie2Entities())
+            {
+                var jsonSettings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+
+                try
+                {
+
+                    var lastIssuedDate = db.FreeMovie
+                                    .Where(fm => fm.Reader_ID == readerId)
+                                    .OrderByDescending(fm => fm.issueDate)
+                                    .Select(fm => fm.issueDate)
+                                    .FirstOrDefault();
+
+                    string todayDateString = DateTime.Today.ToString("yyyy-MM-dd");
+                    bool hasDayPassed = (lastIssuedDate != null && DateTime.Parse(lastIssuedDate) < DateTime.Today);
+
+
+
+
+
+                    var readerIssuedFreeMovie = db.FreeMovie.Where(fm => fm.Reader_ID == readerId).ToList();
+
+
+
+                    if (hasDayPassed || lastIssuedDate == null)
+                    {
+
+
+
+                    again:
+                        var randomSummary = db.Summary
+                                               .OrderBy(r => Guid.NewGuid())
+                                               .FirstOrDefault();
+
+
+                        if (lastIssuedDate == null)
+                        {
+                            randomSummary = db.Summary
+                                              .OrderBy(r => Guid.NewGuid())
+                                              .FirstOrDefault();
+
+                            if (randomSummary == null)
+                            {
+                                return Request.CreateResponse(HttpStatusCode.NotFound, "No available summaries to issue.");
+                            }
+                        }
+
+                        if (randomSummary.Movie_ID == null)
+                        {
+                            goto again;
+                        }
+
+                        if (readerIssuedFreeMovie.Count == db.Summary.Count())
+                        {
+                            var recordsToDelete = db.FreeMovie.Where(fm => fm.Reader_ID == readerId);
+
+                            db.FreeMovie.RemoveRange(recordsToDelete);
+
+                            db.SaveChanges();
+                        }
+
+                        foreach (var issuedMovie in readerIssuedFreeMovie)
+                        {
+                            if (issuedMovie.Movie_ID == randomSummary.Movie_ID && issuedMovie.Writer_ID == randomSummary.Writer_ID)
+                            {
+
+                                goto again;
+                            }
+                        }
+
+                        var movie = db.Movie.Where(m => m.Movie_ID == randomSummary.Movie_ID).Select(s => new
+                        {
+                            s.Movie_ID,
+                            s.Name,
+                            s.Image,
+                            s.CoverImage,
+                            s.Type
+                        }).FirstOrDefault();
+
+
+                        var writer = db.Writer.Where(w => w.Writer_ID == randomSummary.Writer_ID).Select(s => new
+                        {
+                            s.Writer_ID,
+                            s.UserName,
+
+                        }).FirstOrDefault();
+
+
+                        FreeMovie newFreeMovie = new FreeMovie
+                        {
+                            FreeMovie_ID = GenerateId(),
+                            Movie_ID = randomSummary.Movie_ID,
+                            Writer_ID = randomSummary.Writer_ID,
+                            issueDate = todayDateString,
+                            Reader_ID = readerId,
+                            Episode = randomSummary.Episode,
+                        };
+
+                        db.FreeMovie.Add(newFreeMovie);
+                        db.SaveChanges();
+
+
+                        var result = new
+                        {
+                            Movie = movie,
+                            Writer = writer,
+                            Episode = randomSummary.Episode,
+                            IssuedMovie = newFreeMovie
+                        };
+
+
+                        string resultJson = JsonConvert.SerializeObject(result, jsonSettings);
+
+                        HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+                        response.Content = new StringContent(resultJson, Encoding.UTF8, "application/json");
+
+                        return response;
+                    }
+                    else
+                    {
+
+                        var lastIssuedMovie = db.FreeMovie
+                                                .Where(fm => fm.Reader_ID == readerId && fm.issueDate == lastIssuedDate)
+                                                .FirstOrDefault();
+
+                        var movie = db.Movie.Where(m => m.Movie_ID == lastIssuedMovie.Movie_ID).Select(s => new
+                        {
+                            s.Movie_ID,
+                            s.Name,
+                            s.Image,
+                            s.CoverImage,
+                            s.Type
+                        }).FirstOrDefault();
+
+
+                        var writer = db.Writer.Where(w => w.Writer_ID == lastIssuedMovie.Writer_ID).Select(s => new
+                        {
+                            s.Writer_ID,
+                            s.UserName,
+                        }).FirstOrDefault();
+
+
+
+
+                        var result = new
+                        {
+                            issueDate = lastIssuedDate,
+                            Movie = movie,
+                            Writer = writer,
+                            Episode = lastIssuedMovie.Episode,
+
+                        };
+
+
+                        string resultJson = JsonConvert.SerializeObject(result, jsonSettings);
+
+                        HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+                        response.Content = new StringContent(resultJson, Encoding.UTF8, "application/json");
+
+                        return response;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, "An error occurred while processing the request.");
+                }
+            }
+        }
+
+
+
+
+
+
     }
 }
 
@@ -618,3 +801,4 @@ namespace BlinkBackend.Controllers
 //in Last
 //Balance
 //GetNotified
+

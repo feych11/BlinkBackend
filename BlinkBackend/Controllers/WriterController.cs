@@ -210,6 +210,33 @@ namespace BlinkBackend.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [HttpGet]
+        public HttpResponseMessage HistorySentProject(int Writer_ID)
+        {
+            BlinkMovie2Entities db = new BlinkMovie2Entities(); // Assuming BlinkMovie4 is your DbContext name
+            try
+            {
+                var projects = (from sp in db.SentProject
+                                join spro in db.SentProposals on sp.SentProposal_ID equals spro.SentProposal_ID
+                                where sp.Status == "Sent" && sp.Writer_ID == Writer_ID
+                                orderby sp.Send_at descending
+                                select new
+                                {
+                                    SentProject_ID = sp.SentProject_ID,
+                                    Status = sp.Status,
+                                    Send_at = sp.Send_at,
+                                    MovieName = spro.Movie_Name,
+                                    Image = spro.Image
+                                }).ToList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, projects);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
 
         [HttpPost]
         public HttpResponseMessage UpdateRewriteSummary(int SentProject_ID, string updatedSummary)
@@ -244,6 +271,7 @@ namespace BlinkBackend.Controllers
 
                     // Clear the editor's comment
                     sentProject.EditorComment = null;
+                    sentProject.Editor_Notification = true;
 
                     // Save changes to the database
                     db.SaveChanges();
@@ -428,6 +456,7 @@ namespace BlinkBackend.Controllers
                         Editor_ID = p.Editor_ID,
                         Movie_ID = p.Movie_ID,
                         Type = p.Type,
+                        Episode = p.Episode
                         // genre=p.Genre,
                         //DueDate=p.DueDate
                     }).ToList();

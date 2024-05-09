@@ -12,18 +12,13 @@ namespace BlinkBackend.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class GetMovie
+    public partial class FreeMovie
     {
-        public int GetMovie_ID { get; set; }
+        public int FreeMovie_ID { get; set; }
+        public Nullable<int> Reader_ID { get; set; }
         public Nullable<int> Movie_ID { get; set; }
         public Nullable<int> Writer_ID { get; set; }
-        public Nullable<int> Summary_ID { get; set; }
-        public Nullable<int> Clips_ID { get; set; }
-        public Nullable<int> Editor_ID { get; set; }
-    
-        public virtual Clips Clips { get; set; }
-        public virtual Movie Movie { get; set; }
-        public virtual Summary Summary { get; set; }
-        public virtual Writer Writer { get; set; }
+        public Nullable<int> Episode { get; set; }
+        public string issueDate { get; set; }
     }
 }

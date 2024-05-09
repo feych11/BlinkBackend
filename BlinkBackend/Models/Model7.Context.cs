@@ -30,6 +30,7 @@ namespace BlinkBackend.Models
         public virtual DbSet<DramasClips> DramasClips { get; set; }
         public virtual DbSet<Editor> Editor { get; set; }
         public virtual DbSet<Favorites> Favorites { get; set; }
+        public virtual DbSet<FreeMovie> FreeMovie { get; set; }
         public virtual DbSet<Genre> Genre { get; set; }
         public virtual DbSet<GetMovie> GetMovie { get; set; }
         public virtual DbSet<History> History { get; set; }

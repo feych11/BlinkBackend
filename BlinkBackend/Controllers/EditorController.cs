@@ -277,10 +277,11 @@ namespace BlinkBackend.Controllers
                 var setMovie = new GetMovie()
                 {
                     GetMovie_ID = GenerateId(),
-                    // Clips_ID = clip.Clips_ID,
+                   // Clips_ID = clips.Clips_ID,
                     Writer_ID = existingProject.Writer_ID,
                     Movie_ID = existingProject.Movie_ID,
-                    // Summary_ID = summary.Summary_ID,
+                    Editor_ID=existingProject.Editor_ID,
+                    Summary_ID = summary.Summary_ID,
 
                 };
                 db.GetMovie.Add(setMovie);
@@ -477,6 +478,8 @@ namespace BlinkBackend.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, responseContent);
         }
 
+       
+
 
         [HttpGet]
         public HttpResponseMessage ViewSentProject(int Movie_ID)
@@ -487,6 +490,7 @@ namespace BlinkBackend.Controllers
                 s.Summary1,
                 s.Writer_ID
             });
+
              var clip = db.Clips.Where(s => s.Movie_ID == Movie_ID).Select(c => new {
                  c.Movie_ID,
                  c.Url,
@@ -578,6 +582,7 @@ namespace BlinkBackend.Controllers
                     WriterData = writerData,
                     ClipsData = clipsData
                 };
+
                 return Request.CreateResponse(HttpStatusCode.OK, responseData);
             }
             catch (Exception ex)
@@ -928,6 +933,185 @@ namespace BlinkBackend.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+
+
+
+        [HttpGet]
+        public HttpResponseMessage GetMoviesByEditorId(int editorId, string type)
+        {
+            using (BlinkMovie2Entities db = new BlinkMovie2Entities())
+            {
+                try
+                {
+                    object moviesData;
+
+                    if (type == "Movie")
+                    {
+                        moviesData = db.GetMovie
+                                        .Where(m => m.Editor_ID == editorId)
+                                        .Join(db.Movie.Where(movie => movie.Type == "Movie"),
+                                                getMovie => getMovie.Movie_ID,
+                                                movie => movie.Movie_ID,
+                                                (getMovie, movie) => new
+                                                {
+                                                    Editor_ID = getMovie.Editor_ID,
+                                                    MovieID = getMovie.Movie_ID,
+                                                    Title = movie.Name,
+                                                    Image = movie.Image,
+                                                    Type = movie.Type
+                                                })
+                                        .Distinct()
+                                        .ToList();
+                    }
+                    else
+                    {
+                        moviesData = db.GetMovie
+                                        .Where(m => m.Editor_ID == editorId)
+                                        .Join(db.Movie.Where(movie => movie.Type != "Movie"),
+                                                getMovie => getMovie.Movie_ID,
+                                                movie => movie.Movie_ID,
+                                                (getMovie, movie) => new
+                                                {
+                                                    Editor_ID = getMovie.Editor_ID,
+                                                    MovieID = getMovie.Movie_ID,
+                                                    Title = movie.Name,
+                                                    Image = movie.Image,
+                                                    Type = movie.Type
+                                                })
+                                        .Distinct()
+                                        .ToList();
+                    }
+
+                    return Request.CreateResponse(HttpStatusCode.OK, moviesData);
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                }
+            }
+        }
+
+
+        [HttpGet]
+        public HttpResponseMessage GetWritersOfMovies(int editorId, int movieId)
+        {
+            BlinkMovie2Entities db = new BlinkMovie2Entities();
+
+            try
+            {
+
+                var writerIds = db.GetMovie
+                                    .Where(g => g.Editor_ID == editorId && g.Movie_ID == movieId)
+                                    .Select(g => g.Writer_ID)
+                                    .ToList();
+
+                if (writerIds.Count == 0)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "No writers found for the given Data");
+                }
+
+
+                var writersData = db.Writer
+                                    .Where(w => writerIds.Contains(w.Writer_ID))
+                                    .Select(w => new
+                                    {
+                                        w.Writer_ID,
+                                        w.UserName,
+                                        w.Image
+                                    })
+                                    .ToList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, writersData);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+
+        [HttpGet]
+        public HttpResponseMessage GetAcceptedSummary(int movieId, int writerId)
+        {
+            BlinkMovie2Entities db = new BlinkMovie2Entities();
+
+            try
+            {
+                var movieData = db.Movie.Where(m => m.Movie_ID == movieId).Select(s => s.Name).FirstOrDefault();
+
+                var summaryData = db.Summary.Where(s => s.Movie_ID == movieId && s.Writer_ID == writerId).Select(s => s.Summary1)
+                            .FirstOrDefault(); ;
+
+                if (summaryData == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "Summary data not found for the given parameters");
+                }
+
+
+
+                var responseData = new
+                {
+                    movieName = movieData,
+                    SummaryData = summaryData,
+
+                };
+
+                return Request.CreateResponse(HttpStatusCode.OK, responseData);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public HttpResponseMessage GetAcceptedSummaryClips(int movieId, int writerId)
+        {
+            BlinkMovie2Entities db = new BlinkMovie2Entities();
+
+            try
+            {
+                var movieData = db.Movie.Where(m => m.Movie_ID == movieId).Select(s => s.Name).FirstOrDefault();
+
+
+
+
+
+
+                var clipsData = db.Clips
+                                    .Where(c => c.Movie_ID == movieId && c.Writer_ID == writerId)
+                                    .Select(c => new
+                                    {
+                                        c.Clips_ID,
+                                        c.Url,
+                                        c.End_time,
+                                        c.Start_time,
+                                        c.Title,
+                                        c.isCompoundClip
+                                    })
+                                    .OrderBy(c => c.Start_time)
+                                    .ToList();
+                if (clipsData == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "Clips data not found for the given parameters");
+                }
+                var responseData = new
+                {
+                    movieName = movieData,
+                    ClipsData = clipsData
+                };
+
+                return Request.CreateResponse(HttpStatusCode.OK, responseData);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+
+
 
     }
 

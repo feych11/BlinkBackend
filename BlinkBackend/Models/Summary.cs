@@ -26,6 +26,7 @@ namespace BlinkBackend.Models
         public Nullable<int> Writer_ID { get; set; }
         public Nullable<System.DateTime> UploadDate { get; set; }
         public string Summary1 { get; set; }
+        public Nullable<int> Episode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GetMovie> GetMovie { get; set; }
