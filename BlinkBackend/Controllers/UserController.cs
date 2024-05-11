@@ -250,7 +250,7 @@ namespace BlinkBackend.Controllers
                             r.Interest,
                             r.Balance,
 
-                        });
+                        }).FirstOrDefault();
                         break;
 
                     case "editor":
@@ -264,7 +264,8 @@ namespace BlinkBackend.Controllers
                             e.Interest,
 
                             // Add other properties you want to include
-                        });
+                        }).FirstOrDefault();
+
                         break;
 
                     case "writer":

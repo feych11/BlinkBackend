@@ -20,6 +20,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Web.Mvc;
 using System.Xml.Linq;
+using BlinkBackend.Classes;
 
 namespace BlinkBackend.Controllers
 {
@@ -99,9 +100,9 @@ namespace BlinkBackend.Controllers
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
-                var movies = db.Movie.Where(m => m.Type == "Movie").Select(w=> new
+                var movies = db.Movie.Where(m => m.Type == "Movie").Select(w => new
                 {
-                    Id =w.Movie_ID,
+                    Id = w.Movie_ID,
                     Name = w.Name,
                 }).ToList();
 
@@ -128,12 +129,12 @@ namespace BlinkBackend.Controllers
         {
             using (BlinkMovie2Entities db = new BlinkMovie2Entities())
             {
-               
+
                 var writer = db.Writer.ToList<Writer>();
                 if (writer != null)
                 {
 
-                    
+
                     return Request.CreateResponse(HttpStatusCode.OK, writer);
                 }
 
@@ -150,7 +151,7 @@ namespace BlinkBackend.Controllers
             {
                 var projects = db.SentProject
                     .Where(s => s.Status == "Accepted" && s.Editor_ID == Editor_ID)
-                    .OrderByDescending(s=>s.Send_at)
+                    .OrderByDescending(s => s.Send_at)
                     .Select(s => new
                     {
                         s.Movie_ID,
@@ -277,10 +278,10 @@ namespace BlinkBackend.Controllers
                 var setMovie = new GetMovie()
                 {
                     GetMovie_ID = GenerateId(),
-                   // Clips_ID = clips.Clips_ID,
+                    // Clips_ID = clips.Clips_ID,
                     Writer_ID = existingProject.Writer_ID,
                     Movie_ID = existingProject.Movie_ID,
-                    Editor_ID=existingProject.Editor_ID,
+                    Editor_ID = existingProject.Editor_ID,
                     Summary_ID = summary.Summary_ID,
 
                 };
@@ -302,7 +303,7 @@ namespace BlinkBackend.Controllers
             BlinkMovie2Entities db = new BlinkMovie2Entities();
             var request = HttpContext.Current.Request;
 
-            int? movieId =Int32.Parse(request["Movie_ID"]);
+            int? movieId = Int32.Parse(request["Movie_ID"]);
             int? editorId = Int32.Parse(request["Editor_ID"]);
             int? writerId = Int32.Parse(request["Writer_ID"]);
             string movieName = request["Movie_Name"];
@@ -315,17 +316,17 @@ namespace BlinkBackend.Controllers
             string director = request["Director"];
             string dueDate = request["DueDate"];
             DateTime currentDate = DateTime.Now;
-            int amount =Int32.Parse(request["Amount"]);
+            int amount = Int32.Parse(request["Amount"]);
 
             var imageFile = request.Files["Image"];
             //string coverImage = request["Cover_Image"];
 
             //return Request.CreateResponse(HttpStatusCode.OK ,"Image :: " +image);
             //var imageBase64 = request["Image"];
-            
+
             try
             {
-               
+
                 if (movieId != 0)
                 {
                     var proposal = new SentProposals()
@@ -355,9 +356,9 @@ namespace BlinkBackend.Controllers
 
                     var response = new
                     {
-                       
+
                         proposal,
-                        
+
                     };
                     return Request.CreateResponse(HttpStatusCode.OK, response);
                 }
@@ -365,11 +366,11 @@ namespace BlinkBackend.Controllers
                 {
                     int id = GenerateId();
 
-                   var movie = new Movie()
+                    var movie = new Movie()
                     {
                         Movie_ID = id,
                         Name = movieName,
-                       
+
                         Category = genre,
                         Type = type,
                         Director = director,
@@ -378,11 +379,11 @@ namespace BlinkBackend.Controllers
 
 
                     //var imageFile = request["Image"];
-                    if (imageFile != null )
+                    if (imageFile != null)
                     {
                         string imagePath = SaveImageToDisk(imageFile);
                         movie.Image = imagePath;
-                    }   
+                    }
 
 
                     /*var coverImageFile = request["Cover_Image"];
@@ -391,11 +392,11 @@ namespace BlinkBackend.Controllers
                         string imagePath = SaveImageToDisk(coverImageFile);
                         movie.CoverImage = imagePath;
                     }*/
-                            
+
                     db.Movie.Add(movie);
 
                     db.SaveChanges();
-                  var  proposal = new SentProposals()
+                    var proposal = new SentProposals()
                     {
                         SentProposal_ID = GenerateId(),
                         Movie_ID = id,
@@ -409,16 +410,16 @@ namespace BlinkBackend.Controllers
                         Director = director,
                         DueDate = dueDate,
                         Episode = episode,
-                      Sent_at = currentDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                      Balance = amount,
-                      Writer_Notification = true,
-                      Status = "Sent",
+                        Sent_at = currentDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                        Balance = amount,
+                        Writer_Notification = true,
+                        Status = "Sent",
                     };
                     db.SentProposals.Add(proposal);
                     db.SaveChanges();
 
 
-                   var response = new
+                    var response = new
                     {
                         movie,
                         proposal
@@ -426,17 +427,17 @@ namespace BlinkBackend.Controllers
                     return Request.CreateResponse(HttpStatusCode.OK, response);
                 }
 
-               
 
 
 
-              
+
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return Request.CreateResponse( ex.Message);
+                return Request.CreateResponse(ex.Message);
             }
-            
+
         }
 
         [HttpGet]
@@ -452,6 +453,8 @@ namespace BlinkBackend.Controllers
                     s.SentProposal_ID,
                     s.Editor_ID,
                     s.Writer_ID,
+                    s.Status,
+
                     s.Send_at,
                     ProposalData = db.SentProposals
                         .Where(sp => sp.SentProposal_ID == s.SentProposal_ID)
@@ -478,7 +481,7 @@ namespace BlinkBackend.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, responseContent);
         }
 
-       
+
 
 
         [HttpGet]
@@ -491,21 +494,52 @@ namespace BlinkBackend.Controllers
                 s.Writer_ID
             });
 
-             var clip = db.Clips.Where(s => s.Movie_ID == Movie_ID).Select(c => new {
-                 c.Movie_ID,
-                 c.Url,
-                 c.Start_time,
-                 c.End_time,
-                 c.Title,
-                 c.isCompoundClip,
-                 
-             });
+            var project = db.SentProject.FirstOrDefault(s => s.Movie_ID == Movie_ID);
+            if (project == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "SentProject not found");
+            }
+            var movieData = db.Movie
+                                    .FirstOrDefault(m => m.Movie_ID == project.Movie_ID);
+            string mediaType = movieData.Type;
+
+            object clipsData = null;
+            if (mediaType == "Movie")
+            {
+                clipsData = db.Clips
+                                .Where(c => c.Sent_ID == project.SentProject_ID)
+                                .Select(s => new
+                                {
+                                    s.Clips_ID,
+                                    s.Url,
+                                    s.End_time,
+                                    s.Start_time,
+                                    s.Title,
+                                    s.isCompoundClip
+                                }).OrderBy(s => s.Start_time).ToList();
+            }
+            else
+            {
+                clipsData = db.DramasClips
+                                .Where(c => c.Sent_ID == project.SentProject_ID)
+                                .Select(s => new
+                                {
+                                    s.DramasClip_ID,
+                                    s.Url,
+                                    s.End_time,
+                                    s.Start_time,
+                                    s.Title,
+                                    s.Episode,
+                                    s.isCompoundClip
+                                }).OrderBy(s => s.Start_time).ToList();
+            }
+
 
             var responseContent = new
             {
                 Movie_ID,
                 Summary = summary,
-                Clips = clip
+                Clips = clipsData
             };
 
 
@@ -610,7 +644,7 @@ namespace BlinkBackend.Controllers
 
                                         WriterName = db.Writer.FirstOrDefault(w => w.Writer_ID == s.Writer_ID).UserName,
                                         Movie_Name = s.Movie_Name,
-                                        Director=s.Director,
+                                        Director = s.Director,
                                         Type = s.Type,
                                         Genre = s.Genre,
                                         DueDate = s.DueDate,
@@ -627,7 +661,7 @@ namespace BlinkBackend.Controllers
         }
 
 
-       
+
 
 
 
@@ -646,10 +680,10 @@ namespace BlinkBackend.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound, "Project not found");
                 }
 
-                
+
                 sentProject.Status = "Rewrite";
 
-                
+
                 sentProject.EditorComment = editorsComment;
 
                 db.SaveChanges();
