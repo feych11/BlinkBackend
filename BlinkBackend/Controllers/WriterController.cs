@@ -320,7 +320,10 @@ namespace BlinkBackend.Controllers
                     Sent_ID = project.SentProject_ID,
                     Movie_ID = spro.Movie_ID,
                     Writer_ID = spro.Writer_ID,
-                    Summary1 = spro.Summary
+                    Summary1 = spro.Summary,
+                    Episode=proposal.Episode,
+                    
+
                 };
 
                 db.Summary.Add(summary);
@@ -361,7 +364,7 @@ namespace BlinkBackend.Controllers
                             isCompoundClip = clip.isCompoundClip,
                             Start_time = clip.Start_Time.ToString(),
                             End_time = clip.End_Time.ToString(),
-                            Episode = clip.Episode
+                            Episode =proposal.Episode
                         };
 
                         db.DramasClips.Add(newDramasClip);
@@ -842,6 +845,44 @@ namespace BlinkBackend.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, ex.Message);
             }
 
+        }
+
+
+        [HttpGet]
+        public HttpResponseMessage HistoryAcceptedProject(int Writer_ID)
+        {
+            using (BlinkMovie2Entities db = new BlinkMovie2Entities())
+            {
+                var projects = db.SentProject
+                    .Where(s => s.Status == "Accepted" && s.Writer_ID == Writer_ID)
+                    .OrderByDescending(s => s.Send_at)
+                    .Select(s => new
+                    {
+                        s.Movie_ID,
+                        s.Writer_ID,
+                        s.SentProject_ID,
+                        s.SentProposal_ID,
+                        ProposalData = db.SentProposals
+                            .Where(sp => sp.SentProposal_ID == s.SentProposal_ID)
+                            .Select(sp => new
+                            {
+                                sp.Movie_Name,
+                                sp.Image,
+                                sp.Director,
+                                sp.Type
+                            })
+                            .FirstOrDefault(),
+                        s.Status
+                    })
+                    .ToList();
+
+                var responseContent = new
+                {
+                    Project = projects
+                };
+
+                return Request.CreateResponse(HttpStatusCode.OK, responseContent);
+            }
         }
 
 

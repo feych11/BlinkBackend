@@ -193,6 +193,10 @@ namespace BlinkBackend.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound, "Not Found");
                 }
+                // Retrieve actual balance of the writer from the Writer table
+                var writerBalance = db.Writer.Where(w => w.Writer_ID == existingProject.Writer_ID)
+                                             .Select(w => w.Balance)
+                                             .FirstOrDefault();
 
                 existingProject.Status = "Accepted";
                 db.SaveChanges();
@@ -215,7 +219,7 @@ namespace BlinkBackend.Controllers
                 {
                     balance = (proposal.Balance - ((proposal.Balance * 20) / 100));
                 }
-
+                balance += writerBalance;
                 var writerBalace = db.Writer.Where(w => w.Writer_ID == existingProject.Writer_ID).FirstOrDefault();
 
                 writerBalace.Balance = balance;
@@ -507,7 +511,7 @@ namespace BlinkBackend.Controllers
             if (mediaType == "Movie")
             {
                 clipsData = db.Clips
-                                .Where(c => c.Sent_ID == project.SentProject_ID)
+                                .Where(s => s.Movie_ID == Movie_ID)
                                 .Select(s => new
                                 {
                                     s.Clips_ID,
@@ -516,12 +520,12 @@ namespace BlinkBackend.Controllers
                                     s.Start_time,
                                     s.Title,
                                     s.isCompoundClip
-                                }).OrderBy(s => s.Start_time).ToList();
+                                });
             }
             else
             {
                 clipsData = db.DramasClips
-                                .Where(c => c.Sent_ID == project.SentProject_ID)
+                                .Where(s => s.Movie_ID == Movie_ID)
                                 .Select(s => new
                                 {
                                     s.DramasClip_ID,
@@ -531,7 +535,7 @@ namespace BlinkBackend.Controllers
                                     s.Title,
                                     s.Episode,
                                     s.isCompoundClip
-                                }).OrderBy(s => s.Start_time).ToList();
+                                });
             }
 
 
