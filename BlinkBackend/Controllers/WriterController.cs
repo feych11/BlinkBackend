@@ -339,6 +339,7 @@ namespace BlinkBackend.Controllers
                             Writer_ID = proposal.Writer_ID,
                             Movie_ID = proposal.Movie_ID,
                             Url = clip.Url,
+                            UploadDate=currentDate,
                             Title = clip.Title,
                             isCompoundClip = clip.isCompoundClip,
                             Start_time = clip.Start_Time.ToString(),

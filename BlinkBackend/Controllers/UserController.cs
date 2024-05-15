@@ -249,6 +249,7 @@ namespace BlinkBackend.Controllers
                             r.Image,
                             r.Interest,
                             r.Balance,
+                            r.Subscription
 
                         }).FirstOrDefault();
                         break;

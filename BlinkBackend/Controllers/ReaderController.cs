@@ -98,7 +98,7 @@ namespace BlinkBackend.Controllers
 
             var reader = db.Reader.FirstOrDefault(r => r.Reader_ID == Reader_ID);
 
-            if (reader != null) 
+            if (reader != null)
             {
                 reader.Subscription = subscription;
                 db.SaveChanges();
@@ -131,7 +131,7 @@ namespace BlinkBackend.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound, "User not found");
                 }
             }
-        }   
+        }
 
 
         [HttpGet]
@@ -623,34 +623,23 @@ namespace BlinkBackend.Controllers
 
                 try
                 {
-
                     var lastIssuedDate = db.FreeMovie
-                                    .Where(fm => fm.Reader_ID == readerId)
-                                    .OrderByDescending(fm => fm.issueDate)
-                                    .Select(fm => fm.issueDate)
-                                    .FirstOrDefault();
+                                        .Where(fm => fm.Reader_ID == readerId)
+                                        .OrderByDescending(fm => fm.issueDate)
+                                        .Select(fm => fm.issueDate)
+                                        .FirstOrDefault();
 
                     string todayDateString = DateTime.Today.ToString("yyyy-MM-dd");
                     bool hasDayPassed = (lastIssuedDate != null && DateTime.Parse(lastIssuedDate) < DateTime.Today);
 
-
-
-
-
                     var readerIssuedFreeMovie = db.FreeMovie.Where(fm => fm.Reader_ID == readerId).ToList();
-
-
 
                     if (hasDayPassed || lastIssuedDate == null)
                     {
-
-
-
                     again:
                         var randomSummary = db.Summary
-                                               .OrderBy(r => Guid.NewGuid())
-                                               .FirstOrDefault();
-
+                                              .OrderBy(r => Guid.NewGuid())
+                                              .FirstOrDefault();
 
                         if (lastIssuedDate == null)
                         {
@@ -664,6 +653,17 @@ namespace BlinkBackend.Controllers
                             }
                         }
 
+                        // Check if the status of the movie is "Accepted"
+                        var projectStatus = db.SentProject
+                                              .Where(sp => sp.Movie_ID == randomSummary.Movie_ID)
+                                              .Select(sp => sp.Status)
+                                              .FirstOrDefault();
+
+                        if (projectStatus != "Accepted")
+                        {
+                            goto again; // Find another random summary if the status is not "Accepted"
+                        }
+
                         if (randomSummary.Movie_ID == null)
                         {
                             goto again;
@@ -674,7 +674,6 @@ namespace BlinkBackend.Controllers
                             var recordsToDelete = db.FreeMovie.Where(fm => fm.Reader_ID == readerId);
 
                             db.FreeMovie.RemoveRange(recordsToDelete);
-
                             db.SaveChanges();
                         }
 
@@ -682,7 +681,6 @@ namespace BlinkBackend.Controllers
                         {
                             if (issuedMovie.Movie_ID == randomSummary.Movie_ID && issuedMovie.Writer_ID == randomSummary.Writer_ID)
                             {
-
                                 goto again;
                             }
                         }
@@ -696,14 +694,11 @@ namespace BlinkBackend.Controllers
                             s.Type
                         }).FirstOrDefault();
 
-
                         var writer = db.Writer.Where(w => w.Writer_ID == randomSummary.Writer_ID).Select(s => new
                         {
                             s.Writer_ID,
                             s.UserName,
-
                         }).FirstOrDefault();
-
 
                         FreeMovie newFreeMovie = new FreeMovie
                         {
@@ -718,7 +713,6 @@ namespace BlinkBackend.Controllers
                         db.FreeMovie.Add(newFreeMovie);
                         db.SaveChanges();
 
-
                         var result = new
                         {
                             Movie = movie,
@@ -726,7 +720,6 @@ namespace BlinkBackend.Controllers
                             Episode = randomSummary.Episode,
                             IssuedMovie = newFreeMovie
                         };
-
 
                         string resultJson = JsonConvert.SerializeObject(result, jsonSettings);
 
@@ -737,7 +730,6 @@ namespace BlinkBackend.Controllers
                     }
                     else
                     {
-
                         var lastIssuedMovie = db.FreeMovie
                                                 .Where(fm => fm.Reader_ID == readerId && fm.issueDate == lastIssuedDate)
                                                 .FirstOrDefault();
@@ -751,15 +743,11 @@ namespace BlinkBackend.Controllers
                             s.Type
                         }).FirstOrDefault();
 
-
                         var writer = db.Writer.Where(w => w.Writer_ID == lastIssuedMovie.Writer_ID).Select(s => new
                         {
                             s.Writer_ID,
                             s.UserName,
                         }).FirstOrDefault();
-
-
-
 
                         var result = new
                         {
@@ -767,9 +755,7 @@ namespace BlinkBackend.Controllers
                             Movie = movie,
                             Writer = writer,
                             Episode = lastIssuedMovie.Episode,
-
                         };
-
 
                         string resultJson = JsonConvert.SerializeObject(result, jsonSettings);
 
@@ -784,6 +770,46 @@ namespace BlinkBackend.Controllers
                     Console.WriteLine("An error occurred: " + ex.Message);
                     return Request.CreateResponse(HttpStatusCode.InternalServerError, "An error occurred while processing the request.");
                 }
+            }
+        }
+
+
+
+
+        [HttpGet]
+        public HttpResponseMessage IssuePaidMovie()
+        {
+            using (BlinkMovie2Entities db = new BlinkMovie2Entities())
+            {
+                var projects = db.SentProject
+                    .Where(s => s.Status == "Accepted" )
+                    .OrderByDescending(s => s.Send_at)
+                    .Select(s => new
+                    {
+                        s.Movie_ID,
+                        s.Writer_ID,
+                        s.SentProject_ID,
+                        s.SentProposal_ID,
+                        ProposalData = db.SentProposals
+                            .Where(sp => sp.SentProposal_ID == s.SentProposal_ID)
+                            .Select(sp => new
+                            {
+                                sp.Movie_Name,
+                                sp.Image,
+                                sp.Director,
+                                sp.Type
+                            })
+                            .FirstOrDefault(),
+                        s.Status
+                    })
+                    .ToList();
+
+                var responseContent = new
+                {
+                    Project = projects
+                };
+
+                return Request.CreateResponse(HttpStatusCode.OK, responseContent);
             }
         }
 
