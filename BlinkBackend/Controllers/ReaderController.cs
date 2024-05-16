@@ -814,6 +814,57 @@ namespace BlinkBackend.Controllers
         }
 
 
+        [HttpPost]
+        public HttpResponseMessage RechargeBalance(int Reader_ID, int newBalance)
+        {
+            using (BlinkMovie2Entities db = new BlinkMovie2Entities())
+            {
+                try
+                {
+                    var reader = db.Reader.FirstOrDefault(r => r.Reader_ID == Reader_ID);
+                    if (reader == null)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound, "Reader not found");
+                    }
+
+                    reader.Subscription = "Paid";
+                    reader.Balance = (reader.Balance ?? 0) + newBalance;
+                    db.SaveChanges();
+
+                    // Start a background task to reset the balance and subscription after 30 days
+                    Task.Run(async () => await ResetBalanceAndSubscription(reader.Reader_ID));
+
+                    return Request.CreateResponse(HttpStatusCode.OK, "Balance recharged successfully");
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                }
+            }
+        }
+
+        private async Task ResetBalanceAndSubscription(int Reader_ID)
+        {
+            using (BlinkMovie2Entities db = new BlinkMovie2Entities())
+            {
+                await Task.Delay(TimeSpan.FromSeconds(30));
+                try
+                {
+                    var reader = db.Reader.FirstOrDefault(r => r.Reader_ID == Reader_ID);
+                    if (reader != null)
+                    {
+                        reader.Balance = 0;
+                        reader.Subscription = "Free";
+                        db.SaveChanges();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception or handle it as needed
+                }
+            }
+        }
+
 
 
 
