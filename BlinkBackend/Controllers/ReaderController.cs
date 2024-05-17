@@ -847,7 +847,7 @@ namespace BlinkBackend.Controllers
         {
             using (BlinkMovie2Entities db = new BlinkMovie2Entities())
             {
-                await Task.Delay(TimeSpan.FromSeconds(30));
+                await Task.Delay(TimeSpan.FromDays(1));
                 try
                 {
                     var reader = db.Reader.FirstOrDefault(r => r.Reader_ID == Reader_ID);
