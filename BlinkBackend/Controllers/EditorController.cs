@@ -519,7 +519,9 @@ namespace BlinkBackend.Controllers
                                     s.End_time,
                                     s.Start_time,
                                     s.Title,
-                                    s.isCompoundClip
+                                    s.isCompoundClip,
+                                    s.Description
+                                    
                                 });
             }
             else

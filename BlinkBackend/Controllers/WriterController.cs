@@ -344,6 +344,7 @@ namespace BlinkBackend.Controllers
                             isCompoundClip = clip.isCompoundClip,
                             Start_time = clip.Start_Time.ToString(),
                             End_time = clip.End_Time.ToString(),
+                            Description=clip.Description,
                         };
 
                         db.Clips.Add(newClip);

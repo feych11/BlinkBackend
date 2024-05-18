@@ -12,7 +12,7 @@ namespace BlinkBackend.Classes
         public double Start_Time { get; set; }
         public double End_Time { get; set; }
         public string Title { get; set; }
-
+        public string Description { get; set; }
         public int Episode { get; set; }
         public string Url { get; set; }
         public bool isCompoundClip { get; set; }
