@@ -24,6 +24,7 @@ namespace BlinkBackend.Models
         public string Start_time { get; set; }
         public string End_time { get; set; }
         public Nullable<bool> isCompoundClip { get; set; }
+        public string Description { get; set; }
     
         public virtual Movie Movie { get; set; }
         public virtual SentProject SentProject { get; set; }

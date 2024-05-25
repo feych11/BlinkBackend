@@ -887,6 +887,39 @@ namespace BlinkBackend.Controllers
             }
         }
 
+        [HttpPost]
+        public HttpResponseMessage UpdateWriterRating(int writerId, int rating)
+        {
+            using (var db = new BlinkMovie2Entities())
+            {
+                var writer = db.Writer.FirstOrDefault(w => w.Writer_ID == writerId);
+
+                if (writer == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "Writer not found");
+                }
+
+                if (rating < 0 || rating > 5)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Rating should be between 0 and 5");
+                }
+
+                int totalRatings = writer.TotalRatings ?? 0;
+                int totalRatingSum = writer.TotalRatingSum ?? 0;
+
+                totalRatings += 1;
+                totalRatingSum += rating;
+                double averageRating = (double)totalRatingSum / totalRatings;
+
+                writer.TotalRatings = totalRatings;
+                writer.TotalRatingSum = totalRatingSum;
+                writer.AverageRating = averageRating;
+
+                db.SaveChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK, "Writer rating updated successfully");
+            }
+        }
 
 
     }

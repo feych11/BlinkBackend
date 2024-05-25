@@ -13,10 +13,10 @@ namespace BlinkBackend.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class BlinkMovieEntities1 : DbContext
+    public partial class BlinkMovie2Entities : DbContext
     {
-        public BlinkMovieEntities1()
-            : base("name=BlinkMovieEntities1")
+        public BlinkMovie2Entities()
+            : base("name=BlinkMovie2Entities")
         {
         }
     
@@ -25,21 +25,24 @@ namespace BlinkBackend.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<BalanceRequest> BalanceRequests { get; set; }
-        public virtual DbSet<Clip> Clips { get; set; }
-        public virtual DbSet<Editor> Editors { get; set; }
-        public virtual DbSet<Favorite> Favorites { get; set; }
-        public virtual DbSet<Genre> Genres { get; set; }
-        public virtual DbSet<GetMovie> GetMovies { get; set; }
-        public virtual DbSet<History> Histories { get; set; }
-        public virtual DbSet<Interest> Interests { get; set; }
-        public virtual DbSet<Movie> Movies { get; set; }
-        public virtual DbSet<Reader> Readers { get; set; }
-        public virtual DbSet<ReaderRate> ReaderRates { get; set; }
-        public virtual DbSet<SentProject> SentProjects { get; set; }
-        public virtual DbSet<SentProposal> SentProposals { get; set; }
-        public virtual DbSet<Summary> Summaries { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Writer> Writers { get; set; }
+        public virtual DbSet<Admin> Admin { get; set; }
+        public virtual DbSet<BalanceRequests> BalanceRequests { get; set; }
+        public virtual DbSet<Clips> Clips { get; set; }
+        public virtual DbSet<DramasClips> DramasClips { get; set; }
+        public virtual DbSet<Editor> Editor { get; set; }
+        public virtual DbSet<Favorites> Favorites { get; set; }
+        public virtual DbSet<FreeMovie> FreeMovie { get; set; }
+        public virtual DbSet<Genre> Genre { get; set; }
+        public virtual DbSet<GetMovie> GetMovie { get; set; }
+        public virtual DbSet<History> History { get; set; }
+        public virtual DbSet<Interests> Interests { get; set; }
+        public virtual DbSet<Movie> Movie { get; set; }
+        public virtual DbSet<Reader> Reader { get; set; }
+        public virtual DbSet<ReaderRate> ReaderRate { get; set; }
+        public virtual DbSet<SentProject> SentProject { get; set; }
+        public virtual DbSet<SentProposals> SentProposals { get; set; }
+        public virtual DbSet<Summary> Summary { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Writer> Writer { get; set; }
     }
 }

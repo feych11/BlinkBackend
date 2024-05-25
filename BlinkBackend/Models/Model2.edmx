@@ -4,7 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BlinkMovieModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="BlinkMovie4Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Admin_ID" />
+          </Key>
+          <Property Name="Admin_ID" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="varchar(max)" />
+          <Property Name="Email" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="BalanceRequests">
           <Key>
             <PropertyRef Name="Balance_ID" />
@@ -12,21 +20,42 @@
           <Property Name="Balance_ID" Type="int" Nullable="false" />
           <Property Name="Reader_ID" Type="int" />
           <Property Name="Balance" Type="int" />
+          <Property Name="RequestDate" Type="varchar(max)" />
+          <Property Name="Status" Type="varchar(max)" />
+          <Property Name="adminNotifications" Type="bit" />
         </EntityType>
         <EntityType Name="Clips">
           <Key>
             <PropertyRef Name="Clips_ID" />
           </Key>
-          <Property Name="Clips_ID" Type="int" Nullable="false" />
+          <Property Name="Clips_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Writer_ID" Type="int" />
           <Property Name="Movie_ID" Type="int" />
           <Property Name="Sent_ID" Type="int" />
+          <Property Name="Title" Type="varchar(max)" />
           <Property Name="Url" Type="varchar(max)" />
           <Property Name="UploadDate" Type="date" />
-          <Property Name="Start_time" Type="float" />
-          <Property Name="End_time" Type="float" />
+          <Property Name="Start_time" Type="varchar" MaxLength="50" />
+          <Property Name="End_time" Type="varchar" MaxLength="50" />
+          <Property Name="isCompoundClip" Type="bit" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="Likes" Type="int" />
+        </EntityType>
+        <EntityType Name="DramasClips">
+          <Key>
+            <PropertyRef Name="DramasClip_ID" />
+          </Key>
+          <Property Name="DramasClip_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Writer_ID" Type="int" />
+          <Property Name="Sent_ID" Type="int" />
+          <Property Name="Movie_ID" Type="int" />
+          <Property Name="Title" Type="varchar(max)" />
+          <Property Name="Url" Type="varchar(max)" />
+          <Property Name="Episode" Type="int" />
+          <Property Name="Start_time" Type="varchar(max)" />
+          <Property Name="End_time" Type="varchar(max)" />
+          <Property Name="isCompoundClip" Type="bit" />
+          <Property Name="Description" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Editor">
           <Key>
@@ -47,6 +76,17 @@
           <Property Name="Writer_ID" Type="int" />
           <Property Name="Reader_ID" Type="int" />
         </EntityType>
+        <EntityType Name="FreeMovie">
+          <Key>
+            <PropertyRef Name="FreeMovie_ID" />
+          </Key>
+          <Property Name="FreeMovie_ID" Type="int" Nullable="false" />
+          <Property Name="Reader_ID" Type="int" />
+          <Property Name="Movie_ID" Type="int" />
+          <Property Name="Writer_ID" Type="int" />
+          <Property Name="Episode" Type="int" />
+          <Property Name="issueDate" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="Genre">
           <Key>
             <PropertyRef Name="Genre_ID" />
@@ -63,6 +103,7 @@
           <Property Name="Writer_ID" Type="int" />
           <Property Name="Summary_ID" Type="int" />
           <Property Name="Clips_ID" Type="int" />
+          <Property Name="Editor_ID" Type="int" />
         </EntityType>
         <EntityType Name="History">
           <Key>
@@ -129,8 +170,11 @@
           <Property Name="Editor_ID" Type="int" />
           <Property Name="Writer_ID" Type="int" />
           <Property Name="SentProposal_ID" Type="int" />
+          <Property Name="Send_at" Type="varchar(max)" />
           <Property Name="Status" Type="varchar(max)" />
           <Property Name="EditorComment" Type="varchar(max)" />
+          <Property Name="Writer_Notification" Type="bit" />
+          <Property Name="Editor_Notification" Type="bit" />
         </EntityType>
         <EntityType Name="SentProposals">
           <Key>
@@ -145,9 +189,14 @@
           <Property Name="Image" Type="varchar(max)" />
           <Property Name="Genre" Type="varchar(max)" />
           <Property Name="Type" Type="varchar(max)" />
+          <Property Name="Episode" Type="int" />
           <Property Name="Director" Type="varchar(max)" />
+          <Property Name="Balance" Type="int" />
           <Property Name="Status" Type="varchar(max)" />
+          <Property Name="Sent_at" Type="varchar(max)" />
           <Property Name="DueDate" Type="varchar(max)" />
+          <Property Name="Writer_Notification" Type="bit" />
+          <Property Name="Editor_Notification" Type="bit" />
         </EntityType>
         <EntityType Name="Summary">
           <Key>
@@ -159,8 +208,7 @@
           <Property Name="Writer_ID" Type="int" />
           <Property Name="UploadDate" Type="date" />
           <Property Name="Summary" Type="varchar(max)" />
-          <Property Name="Status" Type="varchar(max)" />
-          <Property Name="EditorComment" Type="varchar(max)" />
+          <Property Name="Episode" Type="int" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -186,8 +234,11 @@
           <Property Name="Interest" Type="varchar(max)" />
           <Property Name="Balance" Type="int" />
           <Property Name="Rating" Type="float" />
+          <Property Name="TotalRatings" Type="int" />
+          <Property Name="TotalRatingSum" Type="int" />
+          <Property Name="AverageRating" Type="float" />
         </EntityType>
-        <Association Name="FK__BalanceRe__Reade__66603565">
+        <Association Name="FK__BalanceRe__Reade__68487DD7">
           <End Role="Reader" Type="Self.Reader" Multiplicity="0..1" />
           <End Role="BalanceRequests" Type="Self.BalanceRequests" Multiplicity="*" />
           <ReferentialConstraint>
@@ -223,6 +274,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__DramasCli__Movie__6D0D32F4">
+          <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
+          <End Role="DramasClips" Type="Self.DramasClips" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Movie_ID" />
+            </Principal>
+            <Dependent Role="DramasClips">
+              <PropertyRef Name="Movie_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DramasCli__Sent___6C190EBB">
+          <End Role="SentProject" Type="Self.SentProject" Multiplicity="0..1" />
+          <End Role="DramasClips" Type="Self.DramasClips" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SentProject">
+              <PropertyRef Name="SentProject_ID" />
+            </Principal>
+            <Dependent Role="DramasClips">
+              <PropertyRef Name="Sent_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DramasCli__Write__6B24EA82">
+          <End Role="Writer" Type="Self.Writer" Multiplicity="0..1" />
+          <End Role="DramasClips" Type="Self.DramasClips" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Writer">
+              <PropertyRef Name="Writer_ID" />
+            </Principal>
+            <Dependent Role="DramasClips">
+              <PropertyRef Name="Writer_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Favorites__MID__7B5B524B">
           <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
           <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
@@ -235,7 +322,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Favorites__Reade__6A30C649">
+        <Association Name="FK__Favorites__Reade__6EF57B66">
           <End Role="Reader" Type="Self.Reader" Multiplicity="0..1" />
           <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
           <ReferentialConstraint>
@@ -247,7 +334,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Favorites__Write__693CA210">
+        <Association Name="FK__Favorites__Write__6E01572D">
           <End Role="Writer" Type="Self.Writer" Multiplicity="0..1" />
           <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
           <ReferentialConstraint>
@@ -283,7 +370,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GetMovie__Summar__6C190EBB">
+        <Association Name="FK__GetMovie__Summar__70DDC3D8">
           <End Role="Summary" Type="Self.Summary" Multiplicity="0..1" />
           <End Role="GetMovie" Type="Self.GetMovie" Multiplicity="*" />
           <ReferentialConstraint>
@@ -319,7 +406,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__History__Reader___70DDC3D8">
+        <Association Name="FK__History__Reader___75A278F5">
           <End Role="Reader" Type="Self.Reader" Multiplicity="0..1" />
           <End Role="History" Type="Self.History" Multiplicity="*" />
           <ReferentialConstraint>
@@ -331,7 +418,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__History__Writer___6FE99F9F">
+        <Association Name="FK__History__Writer___74AE54BC">
           <End Role="Writer" Type="Self.Writer" Multiplicity="0..1" />
           <End Role="History" Type="Self.History" Multiplicity="*" />
           <ReferentialConstraint>
@@ -343,7 +430,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ReaderRat__Reade__72C60C4A">
+        <Association Name="FK__ReaderRat__Reade__778AC167">
           <End Role="Reader" Type="Self.Reader" Multiplicity="0..1" />
           <End Role="ReaderRate" Type="Self.ReaderRate" Multiplicity="*" />
           <ReferentialConstraint>
@@ -487,11 +574,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="BlinkMovieModelStoreContainer">
+        <EntityContainer Name="BlinkMovie4ModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BalanceRequests" EntityType="Self.BalanceRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clips" EntityType="Self.Clips" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DramasClips" EntityType="Self.DramasClips" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Editor" EntityType="Self.Editor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Favorites" EntityType="Self.Favorites" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FreeMovie" EntityType="Self.FreeMovie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Genre" EntityType="Self.Genre" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GetMovie" EntityType="Self.GetMovie" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="History" EntityType="Self.History" Schema="dbo" store:Type="Tables" />
@@ -504,7 +594,7 @@
           <EntitySet Name="Summary" EntityType="Self.Summary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Writer" EntityType="Self.Writer" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__BalanceRe__Reade__66603565" Association="Self.FK__BalanceRe__Reade__66603565">
+          <AssociationSet Name="FK__BalanceRe__Reade__68487DD7" Association="Self.FK__BalanceRe__Reade__68487DD7">
             <End Role="Reader" EntitySet="Reader" />
             <End Role="BalanceRequests" EntitySet="BalanceRequests" />
           </AssociationSet>
@@ -516,15 +606,27 @@
             <End Role="Writer" EntitySet="Writer" />
             <End Role="Clips" EntitySet="Clips" />
           </AssociationSet>
+          <AssociationSet Name="FK__DramasCli__Movie__6D0D32F4" Association="Self.FK__DramasCli__Movie__6D0D32F4">
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="DramasClips" EntitySet="DramasClips" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DramasCli__Sent___6C190EBB" Association="Self.FK__DramasCli__Sent___6C190EBB">
+            <End Role="SentProject" EntitySet="SentProject" />
+            <End Role="DramasClips" EntitySet="DramasClips" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DramasCli__Write__6B24EA82" Association="Self.FK__DramasCli__Write__6B24EA82">
+            <End Role="Writer" EntitySet="Writer" />
+            <End Role="DramasClips" EntitySet="DramasClips" />
+          </AssociationSet>
           <AssociationSet Name="FK__Favorites__MID__7B5B524B" Association="Self.FK__Favorites__MID__7B5B524B">
             <End Role="Movie" EntitySet="Movie" />
             <End Role="Favorites" EntitySet="Favorites" />
           </AssociationSet>
-          <AssociationSet Name="FK__Favorites__Reade__6A30C649" Association="Self.FK__Favorites__Reade__6A30C649">
+          <AssociationSet Name="FK__Favorites__Reade__6EF57B66" Association="Self.FK__Favorites__Reade__6EF57B66">
             <End Role="Reader" EntitySet="Reader" />
             <End Role="Favorites" EntitySet="Favorites" />
           </AssociationSet>
-          <AssociationSet Name="FK__Favorites__Write__693CA210" Association="Self.FK__Favorites__Write__693CA210">
+          <AssociationSet Name="FK__Favorites__Write__6E01572D" Association="Self.FK__Favorites__Write__6E01572D">
             <End Role="Writer" EntitySet="Writer" />
             <End Role="Favorites" EntitySet="Favorites" />
           </AssociationSet>
@@ -536,7 +638,7 @@
             <End Role="Movie" EntitySet="Movie" />
             <End Role="GetMovie" EntitySet="GetMovie" />
           </AssociationSet>
-          <AssociationSet Name="FK__GetMovie__Summar__6C190EBB" Association="Self.FK__GetMovie__Summar__6C190EBB">
+          <AssociationSet Name="FK__GetMovie__Summar__70DDC3D8" Association="Self.FK__GetMovie__Summar__70DDC3D8">
             <End Role="Summary" EntitySet="Summary" />
             <End Role="GetMovie" EntitySet="GetMovie" />
           </AssociationSet>
@@ -548,15 +650,15 @@
             <End Role="Movie" EntitySet="Movie" />
             <End Role="History" EntitySet="History" />
           </AssociationSet>
-          <AssociationSet Name="FK__History__Reader___70DDC3D8" Association="Self.FK__History__Reader___70DDC3D8">
+          <AssociationSet Name="FK__History__Reader___75A278F5" Association="Self.FK__History__Reader___75A278F5">
             <End Role="Reader" EntitySet="Reader" />
             <End Role="History" EntitySet="History" />
           </AssociationSet>
-          <AssociationSet Name="FK__History__Writer___6FE99F9F" Association="Self.FK__History__Writer___6FE99F9F">
+          <AssociationSet Name="FK__History__Writer___74AE54BC" Association="Self.FK__History__Writer___74AE54BC">
             <End Role="Writer" EntitySet="Writer" />
             <End Role="History" EntitySet="History" />
           </AssociationSet>
-          <AssociationSet Name="FK__ReaderRat__Reade__72C60C4A" Association="Self.FK__ReaderRat__Reade__72C60C4A">
+          <AssociationSet Name="FK__ReaderRat__Reade__778AC167" Association="Self.FK__ReaderRat__Reade__778AC167">
             <End Role="Reader" EntitySet="Reader" />
             <End Role="ReaderRate" EntitySet="ReaderRate" />
           </AssociationSet>
@@ -609,33 +711,65 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="BlinkMovieModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="BalanceRequest">
+      <Schema Namespace="BlinkMovie4Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="Admin_ID" />
+          </Key>
+          <Property Name="Admin_ID" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="BalanceRequests">
           <Key>
             <PropertyRef Name="Balance_ID" />
           </Key>
           <Property Name="Balance_ID" Type="Int32" Nullable="false" />
           <Property Name="Reader_ID" Type="Int32" />
           <Property Name="Balance" Type="Int32" />
-          <NavigationProperty Name="Reader" Relationship="Self.FK__BalanceRe__Reade__66603565" FromRole="BalanceRequests" ToRole="Reader" />
+          <Property Name="RequestDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="adminNotifications" Type="Boolean" />
+          <NavigationProperty Name="Reader" Relationship="Self.FK__BalanceRe__Reade__68487DD7" FromRole="BalanceRequests" ToRole="Reader" />
         </EntityType>
-        <EntityType Name="Clip">
+        <EntityType Name="Clips">
           <Key>
             <PropertyRef Name="Clips_ID" />
           </Key>
-          <Property Name="Clips_ID" Type="Int32" Nullable="false" />
+          <Property Name="Clips_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Writer_ID" Type="Int32" />
           <Property Name="Movie_ID" Type="Int32" />
           <Property Name="Sent_ID" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="UploadDate" Type="DateTime" Precision="0" />
-          <Property Name="Start_time" Type="Double" />
-          <Property Name="End_time" Type="Double" />
+          <Property Name="Start_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="End_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="isCompoundClip" Type="Boolean" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Likes" Type="Int32" />
           <NavigationProperty Name="Movie" Relationship="Self.FK__Clips__MID__6383C8BA" FromRole="Clips" ToRole="Movie" />
           <NavigationProperty Name="Writer" Relationship="Self.FK__Clips__WID__628FA481" FromRole="Clips" ToRole="Writer" />
-          <NavigationProperty Name="GetMovies" Relationship="Self.FK__GetMovie__CID__6C190EBB" FromRole="Clips" ToRole="GetMovie" />
+          <NavigationProperty Name="GetMovie" Relationship="Self.FK__GetMovie__CID__6C190EBB" FromRole="Clips" ToRole="GetMovie" />
+        </EntityType>
+        <EntityType Name="DramasClips">
+          <Key>
+            <PropertyRef Name="DramasClip_ID" />
+          </Key>
+          <Property Name="DramasClip_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Writer_ID" Type="Int32" />
+          <Property Name="Sent_ID" Type="Int32" />
+          <Property Name="Movie_ID" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Episode" Type="Int32" />
+          <Property Name="Start_time" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="End_time" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="isCompoundClip" Type="Boolean" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Movie" Relationship="Self.FK__DramasCli__Movie__6D0D32F4" FromRole="DramasClips" ToRole="Movie" />
+          <NavigationProperty Name="SentProject" Relationship="Self.FK__DramasCli__Sent___6C190EBB" FromRole="DramasClips" ToRole="SentProject" />
+          <NavigationProperty Name="Writer" Relationship="Self.FK__DramasCli__Write__6B24EA82" FromRole="DramasClips" ToRole="Writer" />
         </EntityType>
         <EntityType Name="Editor">
           <Key>
@@ -646,11 +780,11 @@
           <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Interest" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SentProjects" Relationship="Self.FK__SentProject__EID__36B12243" FromRole="Editor" ToRole="SentProject" />
+          <NavigationProperty Name="SentProject" Relationship="Self.FK__SentProject__EID__36B12243" FromRole="Editor" ToRole="SentProject" />
           <NavigationProperty Name="SentProposals" Relationship="Self.FK__SentProposa__EID__24927208" FromRole="Editor" ToRole="SentProposals" />
           <NavigationProperty Name="Users" Relationship="Self.FK__Users__EID__0CBAE877" FromRole="Editor" ToRole="Users" />
         </EntityType>
-        <EntityType Name="Favorite">
+        <EntityType Name="Favorites">
           <Key>
             <PropertyRef Name="Favorites_ID" />
           </Key>
@@ -659,8 +793,19 @@
           <Property Name="Writer_ID" Type="Int32" />
           <Property Name="Reader_ID" Type="Int32" />
           <NavigationProperty Name="Movie" Relationship="Self.FK__Favorites__MID__7B5B524B" FromRole="Favorites" ToRole="Movie" />
-          <NavigationProperty Name="Reader" Relationship="Self.FK__Favorites__Reade__6A30C649" FromRole="Favorites" ToRole="Reader" />
-          <NavigationProperty Name="Writer" Relationship="Self.FK__Favorites__Write__693CA210" FromRole="Favorites" ToRole="Writer" />
+          <NavigationProperty Name="Reader" Relationship="Self.FK__Favorites__Reade__6EF57B66" FromRole="Favorites" ToRole="Reader" />
+          <NavigationProperty Name="Writer" Relationship="Self.FK__Favorites__Write__6E01572D" FromRole="Favorites" ToRole="Writer" />
+        </EntityType>
+        <EntityType Name="FreeMovie">
+          <Key>
+            <PropertyRef Name="FreeMovie_ID" />
+          </Key>
+          <Property Name="FreeMovie_ID" Type="Int32" Nullable="false" />
+          <Property Name="Reader_ID" Type="Int32" />
+          <Property Name="Movie_ID" Type="Int32" />
+          <Property Name="Writer_ID" Type="Int32" />
+          <Property Name="Episode" Type="Int32" />
+          <Property Name="issueDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Genre">
           <Key>
@@ -678,9 +823,10 @@
           <Property Name="Writer_ID" Type="Int32" />
           <Property Name="Summary_ID" Type="Int32" />
           <Property Name="Clips_ID" Type="Int32" />
-          <NavigationProperty Name="Clip" Relationship="Self.FK__GetMovie__CID__6C190EBB" FromRole="GetMovie" ToRole="Clips" />
+          <Property Name="Editor_ID" Type="Int32" />
+          <NavigationProperty Name="Clips" Relationship="Self.FK__GetMovie__CID__6C190EBB" FromRole="GetMovie" ToRole="Clips" />
           <NavigationProperty Name="Movie" Relationship="Self.FK__GetMovie__MID__693CA210" FromRole="GetMovie" ToRole="Movie" />
-          <NavigationProperty Name="Summary" Relationship="Self.FK__GetMovie__Summar__6C190EBB" FromRole="GetMovie" ToRole="Summary" />
+          <NavigationProperty Name="Summary" Relationship="Self.FK__GetMovie__Summar__70DDC3D8" FromRole="GetMovie" ToRole="Summary" />
           <NavigationProperty Name="Writer" Relationship="Self.FK__GetMovie__WID__6A30C649" FromRole="GetMovie" ToRole="Writer" />
         </EntityType>
         <EntityType Name="History">
@@ -692,15 +838,15 @@
           <Property Name="Writer_ID" Type="Int32" />
           <Property Name="Reader_ID" Type="Int32" />
           <NavigationProperty Name="Movie" Relationship="Self.FK__History__MID__02084FDA" FromRole="History" ToRole="Movie" />
-          <NavigationProperty Name="Reader" Relationship="Self.FK__History__Reader___70DDC3D8" FromRole="History" ToRole="Reader" />
-          <NavigationProperty Name="Writer" Relationship="Self.FK__History__Writer___6FE99F9F" FromRole="History" ToRole="Writer" />
+          <NavigationProperty Name="Reader" Relationship="Self.FK__History__Reader___75A278F5" FromRole="History" ToRole="Reader" />
+          <NavigationProperty Name="Writer" Relationship="Self.FK__History__Writer___74AE54BC" FromRole="History" ToRole="Writer" />
         </EntityType>
-        <EntityType Name="Interest">
+        <EntityType Name="Interests">
           <Key>
             <PropertyRef Name="Interest_ID" />
           </Key>
           <Property Name="Interest_ID" Type="Int32" Nullable="false" />
-          <Property Name="Interests" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Interests1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Movie">
           <Key>
@@ -718,11 +864,12 @@
           <Property Name="TotalNoOfRatings" Type="Int32" />
           <Property Name="anySummaryOrClip" Type="Boolean" />
           <NavigationProperty Name="Clips" Relationship="Self.FK__Clips__MID__6383C8BA" FromRole="Movie" ToRole="Clips" />
+          <NavigationProperty Name="DramasClips" Relationship="Self.FK__DramasCli__Movie__6D0D32F4" FromRole="Movie" ToRole="DramasClips" />
           <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__MID__7B5B524B" FromRole="Movie" ToRole="Favorites" />
-          <NavigationProperty Name="GetMovies" Relationship="Self.FK__GetMovie__MID__693CA210" FromRole="Movie" ToRole="GetMovie" />
-          <NavigationProperty Name="Histories" Relationship="Self.FK__History__MID__02084FDA" FromRole="Movie" ToRole="History" />
-          <NavigationProperty Name="ReaderRates" Relationship="Self.FK__ReaderRate__MID__2C3393D0" FromRole="Movie" ToRole="ReaderRate" />
-          <NavigationProperty Name="Summaries" Relationship="Self.FK__Summary__MID__3F466844" FromRole="Movie" ToRole="Summary" />
+          <NavigationProperty Name="GetMovie" Relationship="Self.FK__GetMovie__MID__693CA210" FromRole="Movie" ToRole="GetMovie" />
+          <NavigationProperty Name="History" Relationship="Self.FK__History__MID__02084FDA" FromRole="Movie" ToRole="History" />
+          <NavigationProperty Name="ReaderRate" Relationship="Self.FK__ReaderRate__MID__2C3393D0" FromRole="Movie" ToRole="ReaderRate" />
+          <NavigationProperty Name="Summary" Relationship="Self.FK__Summary__MID__3F466844" FromRole="Movie" ToRole="Summary" />
         </EntityType>
         <EntityType Name="Reader">
           <Key>
@@ -736,10 +883,10 @@
           <Property Name="Subscription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Balance" Type="Int32" />
           <Property Name="Interest" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="BalanceRequests" Relationship="Self.FK__BalanceRe__Reade__66603565" FromRole="Reader" ToRole="BalanceRequests" />
-          <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__Reade__6A30C649" FromRole="Reader" ToRole="Favorites" />
-          <NavigationProperty Name="Histories" Relationship="Self.FK__History__Reader___70DDC3D8" FromRole="Reader" ToRole="History" />
-          <NavigationProperty Name="ReaderRates" Relationship="Self.FK__ReaderRat__Reade__72C60C4A" FromRole="Reader" ToRole="ReaderRate" />
+          <NavigationProperty Name="BalanceRequests" Relationship="Self.FK__BalanceRe__Reade__68487DD7" FromRole="Reader" ToRole="BalanceRequests" />
+          <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__Reade__6EF57B66" FromRole="Reader" ToRole="Favorites" />
+          <NavigationProperty Name="History" Relationship="Self.FK__History__Reader___75A278F5" FromRole="Reader" ToRole="History" />
+          <NavigationProperty Name="ReaderRate" Relationship="Self.FK__ReaderRat__Reade__778AC167" FromRole="Reader" ToRole="ReaderRate" />
           <NavigationProperty Name="Users" Relationship="Self.FK__Users__RID__0EA330E9" FromRole="Reader" ToRole="Users" />
         </EntityType>
         <EntityType Name="ReaderRate">
@@ -753,7 +900,7 @@
           <Property Name="Writer_Rating" Type="Double" />
           <Property Name="Movie_Rating" Type="Double" />
           <NavigationProperty Name="Movie" Relationship="Self.FK__ReaderRate__MID__2C3393D0" FromRole="ReaderRate" ToRole="Movie" />
-          <NavigationProperty Name="Reader" Relationship="Self.FK__ReaderRat__Reade__72C60C4A" FromRole="ReaderRate" ToRole="Reader" />
+          <NavigationProperty Name="Reader" Relationship="Self.FK__ReaderRat__Reade__778AC167" FromRole="ReaderRate" ToRole="Reader" />
           <NavigationProperty Name="Writer" Relationship="Self.FK__ReaderRate__WID__2B3F6F97" FromRole="ReaderRate" ToRole="Writer" />
         </EntityType>
         <EntityType Name="SentProject">
@@ -765,12 +912,16 @@
           <Property Name="Editor_ID" Type="Int32" />
           <Property Name="Writer_ID" Type="Int32" />
           <Property Name="SentProposal_ID" Type="Int32" />
+          <Property Name="Send_at" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="EditorComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Writer_Notification" Type="Boolean" />
+          <Property Name="Editor_Notification" Type="Boolean" />
+          <NavigationProperty Name="DramasClips" Relationship="Self.FK__DramasCli__Sent___6C190EBB" FromRole="SentProject" ToRole="DramasClips" />
           <NavigationProperty Name="Editor" Relationship="Self.FK__SentProject__EID__36B12243" FromRole="SentProject" ToRole="Editor" />
           <NavigationProperty Name="Writer" Relationship="Self.FK__SentProject__WID__37A5467C" FromRole="SentProject" ToRole="Writer" />
         </EntityType>
-        <EntityType Name="SentProposal">
+        <EntityType Name="SentProposals">
           <Key>
             <PropertyRef Name="SentProposal_ID" />
           </Key>
@@ -783,9 +934,14 @@
           <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Genre" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Episode" Type="Int32" />
           <Property Name="Director" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Balance" Type="Int32" />
           <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Sent_at" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="DueDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Writer_Notification" Type="Boolean" />
+          <Property Name="Editor_Notification" Type="Boolean" />
           <NavigationProperty Name="Editor" Relationship="Self.FK__SentProposa__EID__24927208" FromRole="SentProposals" ToRole="Editor" />
           <NavigationProperty Name="Writer" Relationship="Self.FK__SentProposa__WID__25869641" FromRole="SentProposals" ToRole="Writer" />
         </EntityType>
@@ -799,13 +955,12 @@
           <Property Name="Writer_ID" Type="Int32" />
           <Property Name="UploadDate" Type="DateTime" Precision="0" />
           <Property Name="Summary1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="EditorComment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="GetMovies" Relationship="Self.FK__GetMovie__Summar__6C190EBB" FromRole="Summary" ToRole="GetMovie" />
+          <Property Name="Episode" Type="Int32" />
+          <NavigationProperty Name="GetMovie" Relationship="Self.FK__GetMovie__Summar__70DDC3D8" FromRole="Summary" ToRole="GetMovie" />
           <NavigationProperty Name="Movie" Relationship="Self.FK__Summary__MID__3F466844" FromRole="Summary" ToRole="Movie" />
           <NavigationProperty Name="Writer" Relationship="Self.FK__Summary__WID__403A8C7D" FromRole="Summary" ToRole="Writer" />
         </EntityType>
-        <EntityType Name="User">
+        <EntityType Name="Users">
           <Key>
             <PropertyRef Name="User_ID" />
           </Key>
@@ -832,19 +987,23 @@
           <Property Name="Interest" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Balance" Type="Int32" />
           <Property Name="Rating" Type="Double" />
+          <Property Name="TotalRatings" Type="Int32" />
+          <Property Name="TotalRatingSum" Type="Int32" />
+          <Property Name="AverageRating" Type="Double" />
           <NavigationProperty Name="Clips" Relationship="Self.FK__Clips__WID__628FA481" FromRole="Writer" ToRole="Clips" />
-          <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__Write__693CA210" FromRole="Writer" ToRole="Favorites" />
-          <NavigationProperty Name="GetMovies" Relationship="Self.FK__GetMovie__WID__6A30C649" FromRole="Writer" ToRole="GetMovie" />
-          <NavigationProperty Name="Histories" Relationship="Self.FK__History__Writer___6FE99F9F" FromRole="Writer" ToRole="History" />
-          <NavigationProperty Name="ReaderRates" Relationship="Self.FK__ReaderRate__WID__2B3F6F97" FromRole="Writer" ToRole="ReaderRate" />
-          <NavigationProperty Name="SentProjects" Relationship="Self.FK__SentProject__WID__37A5467C" FromRole="Writer" ToRole="SentProject" />
+          <NavigationProperty Name="DramasClips" Relationship="Self.FK__DramasCli__Write__6B24EA82" FromRole="Writer" ToRole="DramasClips" />
+          <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__Write__6E01572D" FromRole="Writer" ToRole="Favorites" />
+          <NavigationProperty Name="GetMovie" Relationship="Self.FK__GetMovie__WID__6A30C649" FromRole="Writer" ToRole="GetMovie" />
+          <NavigationProperty Name="History" Relationship="Self.FK__History__Writer___74AE54BC" FromRole="Writer" ToRole="History" />
+          <NavigationProperty Name="ReaderRate" Relationship="Self.FK__ReaderRate__WID__2B3F6F97" FromRole="Writer" ToRole="ReaderRate" />
+          <NavigationProperty Name="SentProject" Relationship="Self.FK__SentProject__WID__37A5467C" FromRole="Writer" ToRole="SentProject" />
           <NavigationProperty Name="SentProposals" Relationship="Self.FK__SentProposa__WID__25869641" FromRole="Writer" ToRole="SentProposals" />
-          <NavigationProperty Name="Summaries" Relationship="Self.FK__Summary__WID__403A8C7D" FromRole="Writer" ToRole="Summary" />
+          <NavigationProperty Name="Summary" Relationship="Self.FK__Summary__WID__403A8C7D" FromRole="Writer" ToRole="Summary" />
           <NavigationProperty Name="Users" Relationship="Self.FK__Users__WID__0DAF0CB0" FromRole="Writer" ToRole="Users" />
         </EntityType>
-        <Association Name="FK__BalanceRe__Reade__66603565">
+        <Association Name="FK__BalanceRe__Reade__68487DD7">
           <End Role="Reader" Type="Self.Reader" Multiplicity="0..1" />
-          <End Role="BalanceRequests" Type="Self.BalanceRequest" Multiplicity="*" />
+          <End Role="BalanceRequests" Type="Self.BalanceRequests" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Reader">
               <PropertyRef Name="Reader_ID" />
@@ -856,7 +1015,7 @@
         </Association>
         <Association Name="FK__Clips__MID__6383C8BA">
           <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
-          <End Role="Clips" Type="Self.Clip" Multiplicity="*" />
+          <End Role="Clips" Type="Self.Clips" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Movie">
               <PropertyRef Name="Movie_ID" />
@@ -868,7 +1027,7 @@
         </Association>
         <Association Name="FK__Clips__WID__628FA481">
           <End Role="Writer" Type="Self.Writer" Multiplicity="0..1" />
-          <End Role="Clips" Type="Self.Clip" Multiplicity="*" />
+          <End Role="Clips" Type="Self.Clips" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Writer">
               <PropertyRef Name="Writer_ID" />
@@ -879,7 +1038,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__GetMovie__CID__6C190EBB">
-          <End Role="Clips" Type="Self.Clip" Multiplicity="0..1" />
+          <End Role="Clips" Type="Self.Clips" Multiplicity="0..1" />
           <End Role="GetMovie" Type="Self.GetMovie" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Clips">
@@ -887,6 +1046,42 @@
             </Principal>
             <Dependent Role="GetMovie">
               <PropertyRef Name="Clips_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DramasCli__Movie__6D0D32F4">
+          <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
+          <End Role="DramasClips" Type="Self.DramasClips" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Movie_ID" />
+            </Principal>
+            <Dependent Role="DramasClips">
+              <PropertyRef Name="Movie_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DramasCli__Sent___6C190EBB">
+          <End Role="SentProject" Type="Self.SentProject" Multiplicity="0..1" />
+          <End Role="DramasClips" Type="Self.DramasClips" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SentProject">
+              <PropertyRef Name="SentProject_ID" />
+            </Principal>
+            <Dependent Role="DramasClips">
+              <PropertyRef Name="Sent_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DramasCli__Write__6B24EA82">
+          <End Role="Writer" Type="Self.Writer" Multiplicity="0..1" />
+          <End Role="DramasClips" Type="Self.DramasClips" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Writer">
+              <PropertyRef Name="Writer_ID" />
+            </Principal>
+            <Dependent Role="DramasClips">
+              <PropertyRef Name="Writer_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -904,7 +1099,7 @@
         </Association>
         <Association Name="FK__SentProposa__EID__24927208">
           <End Role="Editor" Type="Self.Editor" Multiplicity="0..1" />
-          <End Role="SentProposals" Type="Self.SentProposal" Multiplicity="*" />
+          <End Role="SentProposals" Type="Self.SentProposals" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Editor">
               <PropertyRef Name="Editor_ID" />
@@ -916,7 +1111,7 @@
         </Association>
         <Association Name="FK__Users__EID__0CBAE877">
           <End Role="Editor" Type="Self.Editor" Multiplicity="0..1" />
-          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Editor">
               <PropertyRef Name="Editor_ID" />
@@ -928,7 +1123,7 @@
         </Association>
         <Association Name="FK__Favorites__MID__7B5B524B">
           <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
-          <End Role="Favorites" Type="Self.Favorite" Multiplicity="*" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Movie">
               <PropertyRef Name="Movie_ID" />
@@ -938,9 +1133,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Favorites__Reade__6A30C649">
+        <Association Name="FK__Favorites__Reade__6EF57B66">
           <End Role="Reader" Type="Self.Reader" Multiplicity="0..1" />
-          <End Role="Favorites" Type="Self.Favorite" Multiplicity="*" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Reader">
               <PropertyRef Name="Reader_ID" />
@@ -950,9 +1145,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Favorites__Write__693CA210">
+        <Association Name="FK__Favorites__Write__6E01572D">
           <End Role="Writer" Type="Self.Writer" Multiplicity="0..1" />
-          <End Role="Favorites" Type="Self.Favorite" Multiplicity="*" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Writer">
               <PropertyRef Name="Writer_ID" />
@@ -974,7 +1169,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GetMovie__Summar__6C190EBB">
+        <Association Name="FK__GetMovie__Summar__70DDC3D8">
           <End Role="Summary" Type="Self.Summary" Multiplicity="0..1" />
           <End Role="GetMovie" Type="Self.GetMovie" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1010,7 +1205,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__History__Reader___70DDC3D8">
+        <Association Name="FK__History__Reader___75A278F5">
           <End Role="Reader" Type="Self.Reader" Multiplicity="0..1" />
           <End Role="History" Type="Self.History" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1022,7 +1217,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__History__Writer___6FE99F9F">
+        <Association Name="FK__History__Writer___74AE54BC">
           <End Role="Writer" Type="Self.Writer" Multiplicity="0..1" />
           <End Role="History" Type="Self.History" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1058,7 +1253,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ReaderRat__Reade__72C60C4A">
+        <Association Name="FK__ReaderRat__Reade__778AC167">
           <End Role="Reader" Type="Self.Reader" Multiplicity="0..1" />
           <End Role="ReaderRate" Type="Self.ReaderRate" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1072,7 +1267,7 @@
         </Association>
         <Association Name="FK__Users__RID__0EA330E9">
           <End Role="Reader" Type="Self.Reader" Multiplicity="0..1" />
-          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Reader">
               <PropertyRef Name="Reader_ID" />
@@ -1108,7 +1303,7 @@
         </Association>
         <Association Name="FK__SentProposa__WID__25869641">
           <End Role="Writer" Type="Self.Writer" Multiplicity="0..1" />
-          <End Role="SentProposals" Type="Self.SentProposal" Multiplicity="*" />
+          <End Role="SentProposals" Type="Self.SentProposals" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Writer">
               <PropertyRef Name="Writer_ID" />
@@ -1132,7 +1327,7 @@
         </Association>
         <Association Name="FK__Users__WID__0DAF0CB0">
           <End Role="Writer" Type="Self.Writer" Multiplicity="0..1" />
-          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Writer">
               <PropertyRef Name="Writer_ID" />
@@ -1142,121 +1337,136 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="BlinkMovieEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="BalanceRequests" EntityType="Self.BalanceRequest" />
-          <EntitySet Name="Clips" EntityType="Self.Clip" />
-          <EntitySet Name="Editors" EntityType="Self.Editor" />
-          <EntitySet Name="Favorites" EntityType="Self.Favorite" />
-          <EntitySet Name="Genres" EntityType="Self.Genre" />
-          <EntitySet Name="GetMovies" EntityType="Self.GetMovie" />
-          <EntitySet Name="Histories" EntityType="Self.History" />
-          <EntitySet Name="Interests" EntityType="Self.Interest" />
-          <EntitySet Name="Movies" EntityType="Self.Movie" />
-          <EntitySet Name="Readers" EntityType="Self.Reader" />
-          <EntitySet Name="ReaderRates" EntityType="Self.ReaderRate" />
-          <EntitySet Name="SentProjects" EntityType="Self.SentProject" />
-          <EntitySet Name="SentProposals" EntityType="Self.SentProposal" />
-          <EntitySet Name="Summaries" EntityType="Self.Summary" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="Writers" EntityType="Self.Writer" />
-          <AssociationSet Name="FK__BalanceRe__Reade__66603565" Association="Self.FK__BalanceRe__Reade__66603565">
-            <End Role="Reader" EntitySet="Readers" />
+        <EntityContainer Name="BlinkMovie2Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admin" EntityType="Self.Admin" />
+          <EntitySet Name="BalanceRequests" EntityType="Self.BalanceRequests" />
+          <EntitySet Name="Clips" EntityType="Self.Clips" />
+          <EntitySet Name="DramasClips" EntityType="Self.DramasClips" />
+          <EntitySet Name="Editor" EntityType="Self.Editor" />
+          <EntitySet Name="Favorites" EntityType="Self.Favorites" />
+          <EntitySet Name="FreeMovie" EntityType="Self.FreeMovie" />
+          <EntitySet Name="Genre" EntityType="Self.Genre" />
+          <EntitySet Name="GetMovie" EntityType="Self.GetMovie" />
+          <EntitySet Name="History" EntityType="Self.History" />
+          <EntitySet Name="Interests" EntityType="Self.Interests" />
+          <EntitySet Name="Movie" EntityType="Self.Movie" />
+          <EntitySet Name="Reader" EntityType="Self.Reader" />
+          <EntitySet Name="ReaderRate" EntityType="Self.ReaderRate" />
+          <EntitySet Name="SentProject" EntityType="Self.SentProject" />
+          <EntitySet Name="SentProposals" EntityType="Self.SentProposals" />
+          <EntitySet Name="Summary" EntityType="Self.Summary" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <EntitySet Name="Writer" EntityType="Self.Writer" />
+          <AssociationSet Name="FK__BalanceRe__Reade__68487DD7" Association="Self.FK__BalanceRe__Reade__68487DD7">
+            <End Role="Reader" EntitySet="Reader" />
             <End Role="BalanceRequests" EntitySet="BalanceRequests" />
           </AssociationSet>
           <AssociationSet Name="FK__Clips__MID__6383C8BA" Association="Self.FK__Clips__MID__6383C8BA">
-            <End Role="Movie" EntitySet="Movies" />
+            <End Role="Movie" EntitySet="Movie" />
             <End Role="Clips" EntitySet="Clips" />
           </AssociationSet>
           <AssociationSet Name="FK__Clips__WID__628FA481" Association="Self.FK__Clips__WID__628FA481">
-            <End Role="Writer" EntitySet="Writers" />
+            <End Role="Writer" EntitySet="Writer" />
             <End Role="Clips" EntitySet="Clips" />
           </AssociationSet>
           <AssociationSet Name="FK__GetMovie__CID__6C190EBB" Association="Self.FK__GetMovie__CID__6C190EBB">
             <End Role="Clips" EntitySet="Clips" />
-            <End Role="GetMovie" EntitySet="GetMovies" />
+            <End Role="GetMovie" EntitySet="GetMovie" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DramasCli__Movie__6D0D32F4" Association="Self.FK__DramasCli__Movie__6D0D32F4">
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="DramasClips" EntitySet="DramasClips" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DramasCli__Sent___6C190EBB" Association="Self.FK__DramasCli__Sent___6C190EBB">
+            <End Role="SentProject" EntitySet="SentProject" />
+            <End Role="DramasClips" EntitySet="DramasClips" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DramasCli__Write__6B24EA82" Association="Self.FK__DramasCli__Write__6B24EA82">
+            <End Role="Writer" EntitySet="Writer" />
+            <End Role="DramasClips" EntitySet="DramasClips" />
           </AssociationSet>
           <AssociationSet Name="FK__SentProject__EID__36B12243" Association="Self.FK__SentProject__EID__36B12243">
-            <End Role="Editor" EntitySet="Editors" />
-            <End Role="SentProject" EntitySet="SentProjects" />
+            <End Role="Editor" EntitySet="Editor" />
+            <End Role="SentProject" EntitySet="SentProject" />
           </AssociationSet>
           <AssociationSet Name="FK__SentProposa__EID__24927208" Association="Self.FK__SentProposa__EID__24927208">
-            <End Role="Editor" EntitySet="Editors" />
+            <End Role="Editor" EntitySet="Editor" />
             <End Role="SentProposals" EntitySet="SentProposals" />
           </AssociationSet>
           <AssociationSet Name="FK__Users__EID__0CBAE877" Association="Self.FK__Users__EID__0CBAE877">
-            <End Role="Editor" EntitySet="Editors" />
+            <End Role="Editor" EntitySet="Editor" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
           <AssociationSet Name="FK__Favorites__MID__7B5B524B" Association="Self.FK__Favorites__MID__7B5B524B">
-            <End Role="Movie" EntitySet="Movies" />
+            <End Role="Movie" EntitySet="Movie" />
             <End Role="Favorites" EntitySet="Favorites" />
           </AssociationSet>
-          <AssociationSet Name="FK__Favorites__Reade__6A30C649" Association="Self.FK__Favorites__Reade__6A30C649">
-            <End Role="Reader" EntitySet="Readers" />
+          <AssociationSet Name="FK__Favorites__Reade__6EF57B66" Association="Self.FK__Favorites__Reade__6EF57B66">
+            <End Role="Reader" EntitySet="Reader" />
             <End Role="Favorites" EntitySet="Favorites" />
           </AssociationSet>
-          <AssociationSet Name="FK__Favorites__Write__693CA210" Association="Self.FK__Favorites__Write__693CA210">
-            <End Role="Writer" EntitySet="Writers" />
+          <AssociationSet Name="FK__Favorites__Write__6E01572D" Association="Self.FK__Favorites__Write__6E01572D">
+            <End Role="Writer" EntitySet="Writer" />
             <End Role="Favorites" EntitySet="Favorites" />
           </AssociationSet>
           <AssociationSet Name="FK__GetMovie__MID__693CA210" Association="Self.FK__GetMovie__MID__693CA210">
-            <End Role="Movie" EntitySet="Movies" />
-            <End Role="GetMovie" EntitySet="GetMovies" />
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="GetMovie" EntitySet="GetMovie" />
           </AssociationSet>
-          <AssociationSet Name="FK__GetMovie__Summar__6C190EBB" Association="Self.FK__GetMovie__Summar__6C190EBB">
-            <End Role="Summary" EntitySet="Summaries" />
-            <End Role="GetMovie" EntitySet="GetMovies" />
+          <AssociationSet Name="FK__GetMovie__Summar__70DDC3D8" Association="Self.FK__GetMovie__Summar__70DDC3D8">
+            <End Role="Summary" EntitySet="Summary" />
+            <End Role="GetMovie" EntitySet="GetMovie" />
           </AssociationSet>
           <AssociationSet Name="FK__GetMovie__WID__6A30C649" Association="Self.FK__GetMovie__WID__6A30C649">
-            <End Role="Writer" EntitySet="Writers" />
-            <End Role="GetMovie" EntitySet="GetMovies" />
+            <End Role="Writer" EntitySet="Writer" />
+            <End Role="GetMovie" EntitySet="GetMovie" />
           </AssociationSet>
           <AssociationSet Name="FK__History__MID__02084FDA" Association="Self.FK__History__MID__02084FDA">
-            <End Role="Movie" EntitySet="Movies" />
-            <End Role="History" EntitySet="Histories" />
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="History" EntitySet="History" />
           </AssociationSet>
-          <AssociationSet Name="FK__History__Reader___70DDC3D8" Association="Self.FK__History__Reader___70DDC3D8">
-            <End Role="Reader" EntitySet="Readers" />
-            <End Role="History" EntitySet="Histories" />
+          <AssociationSet Name="FK__History__Reader___75A278F5" Association="Self.FK__History__Reader___75A278F5">
+            <End Role="Reader" EntitySet="Reader" />
+            <End Role="History" EntitySet="History" />
           </AssociationSet>
-          <AssociationSet Name="FK__History__Writer___6FE99F9F" Association="Self.FK__History__Writer___6FE99F9F">
-            <End Role="Writer" EntitySet="Writers" />
-            <End Role="History" EntitySet="Histories" />
+          <AssociationSet Name="FK__History__Writer___74AE54BC" Association="Self.FK__History__Writer___74AE54BC">
+            <End Role="Writer" EntitySet="Writer" />
+            <End Role="History" EntitySet="History" />
           </AssociationSet>
           <AssociationSet Name="FK__ReaderRate__MID__2C3393D0" Association="Self.FK__ReaderRate__MID__2C3393D0">
-            <End Role="Movie" EntitySet="Movies" />
-            <End Role="ReaderRate" EntitySet="ReaderRates" />
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="ReaderRate" EntitySet="ReaderRate" />
           </AssociationSet>
           <AssociationSet Name="FK__Summary__MID__3F466844" Association="Self.FK__Summary__MID__3F466844">
-            <End Role="Movie" EntitySet="Movies" />
-            <End Role="Summary" EntitySet="Summaries" />
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="Summary" EntitySet="Summary" />
           </AssociationSet>
-          <AssociationSet Name="FK__ReaderRat__Reade__72C60C4A" Association="Self.FK__ReaderRat__Reade__72C60C4A">
-            <End Role="Reader" EntitySet="Readers" />
-            <End Role="ReaderRate" EntitySet="ReaderRates" />
+          <AssociationSet Name="FK__ReaderRat__Reade__778AC167" Association="Self.FK__ReaderRat__Reade__778AC167">
+            <End Role="Reader" EntitySet="Reader" />
+            <End Role="ReaderRate" EntitySet="ReaderRate" />
           </AssociationSet>
           <AssociationSet Name="FK__Users__RID__0EA330E9" Association="Self.FK__Users__RID__0EA330E9">
-            <End Role="Reader" EntitySet="Readers" />
+            <End Role="Reader" EntitySet="Reader" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
           <AssociationSet Name="FK__ReaderRate__WID__2B3F6F97" Association="Self.FK__ReaderRate__WID__2B3F6F97">
-            <End Role="Writer" EntitySet="Writers" />
-            <End Role="ReaderRate" EntitySet="ReaderRates" />
+            <End Role="Writer" EntitySet="Writer" />
+            <End Role="ReaderRate" EntitySet="ReaderRate" />
           </AssociationSet>
           <AssociationSet Name="FK__SentProject__WID__37A5467C" Association="Self.FK__SentProject__WID__37A5467C">
-            <End Role="Writer" EntitySet="Writers" />
-            <End Role="SentProject" EntitySet="SentProjects" />
+            <End Role="Writer" EntitySet="Writer" />
+            <End Role="SentProject" EntitySet="SentProject" />
           </AssociationSet>
           <AssociationSet Name="FK__SentProposa__WID__25869641" Association="Self.FK__SentProposa__WID__25869641">
-            <End Role="Writer" EntitySet="Writers" />
+            <End Role="Writer" EntitySet="Writer" />
             <End Role="SentProposals" EntitySet="SentProposals" />
           </AssociationSet>
           <AssociationSet Name="FK__Summary__WID__403A8C7D" Association="Self.FK__Summary__WID__403A8C7D">
-            <End Role="Writer" EntitySet="Writers" />
-            <End Role="Summary" EntitySet="Summaries" />
+            <End Role="Writer" EntitySet="Writer" />
+            <End Role="Summary" EntitySet="Summary" />
           </AssociationSet>
           <AssociationSet Name="FK__Users__WID__0DAF0CB0" Association="Self.FK__Users__WID__0DAF0CB0">
-            <End Role="Writer" EntitySet="Writers" />
+            <End Role="Writer" EntitySet="Writer" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
@@ -1265,34 +1475,65 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BlinkMovieModelStoreContainer" CdmEntityContainer="BlinkMovieEntities1">
+        <EntityContainerMapping StorageEntityContainer="BlinkMovie4ModelStoreContainer" CdmEntityContainer="BlinkMovie2Entities">
+          <EntitySetMapping Name="Admin">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="Admin_ID" ColumnName="Admin_ID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="BalanceRequests">
-            <EntityTypeMapping TypeName="BlinkMovieModel.BalanceRequest">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.BalanceRequests">
               <MappingFragment StoreEntitySet="BalanceRequests">
                 <ScalarProperty Name="Balance_ID" ColumnName="Balance_ID" />
                 <ScalarProperty Name="Reader_ID" ColumnName="Reader_ID" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="adminNotifications" ColumnName="adminNotifications" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Clips">
-            <EntityTypeMapping TypeName="BlinkMovieModel.Clip">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Clips">
               <MappingFragment StoreEntitySet="Clips">
                 <ScalarProperty Name="Clips_ID" ColumnName="Clips_ID" />
                 <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
                 <ScalarProperty Name="Sent_ID" ColumnName="Sent_ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
                 <ScalarProperty Name="Start_time" ColumnName="Start_time" />
                 <ScalarProperty Name="End_time" ColumnName="End_time" />
+                <ScalarProperty Name="isCompoundClip" ColumnName="isCompoundClip" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Likes" ColumnName="Likes" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Editors">
-            <EntityTypeMapping TypeName="BlinkMovieModel.Editor">
+          <EntitySetMapping Name="DramasClips">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.DramasClips">
+              <MappingFragment StoreEntitySet="DramasClips">
+                <ScalarProperty Name="DramasClip_ID" ColumnName="DramasClip_ID" />
+                <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
+                <ScalarProperty Name="Sent_ID" ColumnName="Sent_ID" />
+                <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Episode" ColumnName="Episode" />
+                <ScalarProperty Name="Start_time" ColumnName="Start_time" />
+                <ScalarProperty Name="End_time" ColumnName="End_time" />
+                <ScalarProperty Name="isCompoundClip" ColumnName="isCompoundClip" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Editor">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Editor">
               <MappingFragment StoreEntitySet="Editor">
                 <ScalarProperty Name="Editor_ID" ColumnName="Editor_ID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1303,7 +1544,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Favorites">
-            <EntityTypeMapping TypeName="BlinkMovieModel.Favorite">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Favorites">
               <MappingFragment StoreEntitySet="Favorites">
                 <ScalarProperty Name="Favorites_ID" ColumnName="Favorites_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
@@ -1312,27 +1553,40 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Genres">
-            <EntityTypeMapping TypeName="BlinkMovieModel.Genre">
+          <EntitySetMapping Name="FreeMovie">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.FreeMovie">
+              <MappingFragment StoreEntitySet="FreeMovie">
+                <ScalarProperty Name="FreeMovie_ID" ColumnName="FreeMovie_ID" />
+                <ScalarProperty Name="Reader_ID" ColumnName="Reader_ID" />
+                <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
+                <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
+                <ScalarProperty Name="Episode" ColumnName="Episode" />
+                <ScalarProperty Name="issueDate" ColumnName="issueDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genre">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Genre">
               <MappingFragment StoreEntitySet="Genre">
                 <ScalarProperty Name="Genre_ID" ColumnName="Genre_ID" />
                 <ScalarProperty Name="Genre_Name" ColumnName="Genre_Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="GetMovies">
-            <EntityTypeMapping TypeName="BlinkMovieModel.GetMovie">
+          <EntitySetMapping Name="GetMovie">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.GetMovie">
               <MappingFragment StoreEntitySet="GetMovie">
                 <ScalarProperty Name="GetMovie_ID" ColumnName="GetMovie_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
                 <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
                 <ScalarProperty Name="Summary_ID" ColumnName="Summary_ID" />
                 <ScalarProperty Name="Clips_ID" ColumnName="Clips_ID" />
+                <ScalarProperty Name="Editor_ID" ColumnName="Editor_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Histories">
-            <EntityTypeMapping TypeName="BlinkMovieModel.History">
+          <EntitySetMapping Name="History">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.History">
               <MappingFragment StoreEntitySet="History">
                 <ScalarProperty Name="History_ID" ColumnName="History_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
@@ -1342,15 +1596,15 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Interests">
-            <EntityTypeMapping TypeName="BlinkMovieModel.Interest">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Interests">
               <MappingFragment StoreEntitySet="Interests">
                 <ScalarProperty Name="Interest_ID" ColumnName="Interest_ID" />
-                <ScalarProperty Name="Interests" ColumnName="Interests" />
+                <ScalarProperty Name="Interests1" ColumnName="Interests" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Movies">
-            <EntityTypeMapping TypeName="BlinkMovieModel.Movie">
+          <EntitySetMapping Name="Movie">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Movie">
               <MappingFragment StoreEntitySet="Movie">
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1366,8 +1620,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Readers">
-            <EntityTypeMapping TypeName="BlinkMovieModel.Reader">
+          <EntitySetMapping Name="Reader">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Reader">
               <MappingFragment StoreEntitySet="Reader">
                 <ScalarProperty Name="Reader_ID" ColumnName="Reader_ID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1380,8 +1634,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ReaderRates">
-            <EntityTypeMapping TypeName="BlinkMovieModel.ReaderRate">
+          <EntitySetMapping Name="ReaderRate">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.ReaderRate">
               <MappingFragment StoreEntitySet="ReaderRate">
                 <ScalarProperty Name="ReaderRate_ID" ColumnName="ReaderRate_ID" />
                 <ScalarProperty Name="Reader_ID" ColumnName="Reader_ID" />
@@ -1392,21 +1646,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SentProjects">
-            <EntityTypeMapping TypeName="BlinkMovieModel.SentProject">
+          <EntitySetMapping Name="SentProject">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.SentProject">
               <MappingFragment StoreEntitySet="SentProject">
                 <ScalarProperty Name="SentProject_ID" ColumnName="SentProject_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
                 <ScalarProperty Name="Editor_ID" ColumnName="Editor_ID" />
                 <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
                 <ScalarProperty Name="SentProposal_ID" ColumnName="SentProposal_ID" />
+                <ScalarProperty Name="Send_at" ColumnName="Send_at" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="EditorComment" ColumnName="EditorComment" />
+                <ScalarProperty Name="Writer_Notification" ColumnName="Writer_Notification" />
+                <ScalarProperty Name="Editor_Notification" ColumnName="Editor_Notification" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SentProposals">
-            <EntityTypeMapping TypeName="BlinkMovieModel.SentProposal">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.SentProposals">
               <MappingFragment StoreEntitySet="SentProposals">
                 <ScalarProperty Name="SentProposal_ID" ColumnName="SentProposal_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
@@ -1417,14 +1674,19 @@
                 <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Genre" ColumnName="Genre" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Episode" ColumnName="Episode" />
                 <ScalarProperty Name="Director" ColumnName="Director" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Sent_at" ColumnName="Sent_at" />
                 <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Writer_Notification" ColumnName="Writer_Notification" />
+                <ScalarProperty Name="Editor_Notification" ColumnName="Editor_Notification" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Summaries">
-            <EntityTypeMapping TypeName="BlinkMovieModel.Summary">
+          <EntitySetMapping Name="Summary">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Summary">
               <MappingFragment StoreEntitySet="Summary">
                 <ScalarProperty Name="Summary_ID" ColumnName="Summary_ID" />
                 <ScalarProperty Name="Sent_ID" ColumnName="Sent_ID" />
@@ -1432,13 +1694,12 @@
                 <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
                 <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
                 <ScalarProperty Name="Summary1" ColumnName="Summary" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="EditorComment" ColumnName="EditorComment" />
+                <ScalarProperty Name="Episode" ColumnName="Episode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="BlinkMovieModel.User">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Users">
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="User_ID" ColumnName="User_ID" />
                 <ScalarProperty Name="Editor_ID" ColumnName="Editor_ID" />
@@ -1450,8 +1711,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Writers">
-            <EntityTypeMapping TypeName="BlinkMovieModel.Writer">
+          <EntitySetMapping Name="Writer">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Writer">
               <MappingFragment StoreEntitySet="Writer">
                 <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1461,6 +1722,9 @@
                 <ScalarProperty Name="Interest" ColumnName="Interest" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
                 <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="TotalRatings" ColumnName="TotalRatings" />
+                <ScalarProperty Name="TotalRatingSum" ColumnName="TotalRatingSum" />
+                <ScalarProperty Name="AverageRating" ColumnName="AverageRating" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1478,7 +1742,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

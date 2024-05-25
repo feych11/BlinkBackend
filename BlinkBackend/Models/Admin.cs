@@ -12,15 +12,10 @@ namespace BlinkBackend.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class BalanceRequests
+    public partial class Admin
     {
-        public int Balance_ID { get; set; }
-        public Nullable<int> Reader_ID { get; set; }
-        public Nullable<int> Balance { get; set; }
-        public string RequestDate { get; set; }
-        public string Status { get; set; }
-        public Nullable<bool> adminNotifications { get; set; }
-    
-        public virtual Reader Reader { get; set; }
+        public int Admin_ID { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
     }
 }

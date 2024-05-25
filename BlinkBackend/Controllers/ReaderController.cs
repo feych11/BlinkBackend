@@ -610,7 +610,6 @@ namespace BlinkBackend.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
-
         [HttpGet]
         public HttpResponseMessage IssueFreeMovie(int readerId)
         {
@@ -776,6 +775,7 @@ namespace BlinkBackend.Controllers
 
 
 
+
         [HttpGet]
         public HttpResponseMessage IssuePaidMovie()
         {
@@ -800,6 +800,11 @@ namespace BlinkBackend.Controllers
                                 sp.Type
                             })
                             .FirstOrDefault(),
+                            WriterData=db.Writer.Where(sp=>sp.Writer_ID==s.Writer_ID).Select(sp=>new
+                            {
+                                sp.UserName,
+                            }).FirstOrDefault(),
+
                         s.Status
                     })
                     .ToList();
