@@ -869,6 +869,30 @@ namespace BlinkBackend.Controllers
                 }
             }
         }
+        [HttpPut]
+        public HttpResponseMessage SendBalanceRequest(int Reader_ID, int Amount)
+        {
+            BlinkMovie2Entities db = new BlinkMovie2Entities();
+
+            DateTime currentDate = new DateTime();
+
+            var balance = new BalanceRequests
+            {
+                Balance_ID = GenerateId(),
+                Reader_ID = Reader_ID,
+                Balance = Amount,
+                Status = "Sent",
+                RequestDate = currentDate.ToString(),
+                adminNotifications = true
+            };
+            db.BalanceRequests.Add(balance);
+            db.SaveChanges();
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, "Subscription updated successfully");
+
+
+        }
 
 
 
