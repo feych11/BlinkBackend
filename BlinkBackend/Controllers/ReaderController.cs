@@ -31,35 +31,30 @@ namespace BlinkBackend.Controllers
             return Math.Abs(userId);
         }
         [HttpPost]
-
-        public HttpResponseMessage AddReaderFavorites(Favorites f)
+        public HttpResponseMessage AddReaderFavorites(int readerId, int writerId, int movieId)
         {
-
             BlinkMovie2Entities db = new BlinkMovie2Entities();
             try
             {
-
-
                 var favorites = new Favorites()
                 {
-                    Favorites_ID = GenerateId(),
-                    Reader_ID = f.Reader_ID,
-                    Writer_ID = f.Writer_ID,
-                    Movie_ID = f.Movie_ID,
+                    Favorites_ID = GenerateId(), // Assuming GenerateId() generates the ID for Favorites
+                    Reader_ID = readerId,
+                    Writer_ID = writerId,
+                    Movie_ID = movieId,
                 };
 
                 db.Favorites.Add(favorites);
                 db.SaveChanges();
 
                 return Request.CreateResponse(HttpStatusCode.OK, "Added To Favorites");
-
-
             }
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
+
 
         [HttpPost]
 
@@ -403,8 +398,9 @@ namespace BlinkBackend.Controllers
                         WriterName = x.writer.UserName,
                         MovieTitle = x.movie.Name,
                         Director = x.movie.Director,
-                        MovieRating = x.movie.Rating,
-                        WriterRating = x.writer.Rating
+                        Image=x.movie.Image,
+                        MovieRating = x.movie.AverageRating,
+                        WriterRating = x.writer.AverageRating,
 
                     }).ToList<object>();
 

@@ -179,7 +179,12 @@ namespace BlinkBackend.Controllers
                         UserName = username,
                         Password = password,
                     };
+
+
+
                     db.Editor.Add(newUser);
+
+
 
                     var data = new
                     {

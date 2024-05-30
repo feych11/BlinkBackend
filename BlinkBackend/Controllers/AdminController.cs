@@ -275,5 +275,30 @@ namespace BlinkBackend.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpPost]
+        public HttpResponseMessage Login(string email, string username)
+        {
+
+            try
+            {
+                var admin = db.Admin
+                              .Where(a => a.Email == email && a.UserName == username)
+                              .FirstOrDefault();
+
+                if (admin != null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, admin);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Admin not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
+        }
     }
 }

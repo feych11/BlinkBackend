@@ -136,6 +136,9 @@
           <Property Name="Rating" Type="float" />
           <Property Name="TotalNoOfRatings" Type="int" />
           <Property Name="anySummaryOrClip" Type="bit" />
+          <Property Name="TotalRatings" Type="int" />
+          <Property Name="TotalRatingSum" Type="int" />
+          <Property Name="AverageRating" Type="float" />
         </EntityType>
         <EntityType Name="Reader">
           <Key>
@@ -863,6 +866,9 @@
           <Property Name="Rating" Type="Double" />
           <Property Name="TotalNoOfRatings" Type="Int32" />
           <Property Name="anySummaryOrClip" Type="Boolean" />
+          <Property Name="TotalRatings" Type="Int32" />
+          <Property Name="TotalRatingSum" Type="Int32" />
+          <Property Name="AverageRating" Type="Double" />
           <NavigationProperty Name="Clips" Relationship="Self.FK__Clips__MID__6383C8BA" FromRole="Movie" ToRole="Clips" />
           <NavigationProperty Name="DramasClips" Relationship="Self.FK__DramasCli__Movie__6D0D32F4" FromRole="Movie" ToRole="DramasClips" />
           <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__MID__7B5B524B" FromRole="Movie" ToRole="Favorites" />
@@ -1617,6 +1623,9 @@
                 <ScalarProperty Name="Rating" ColumnName="Rating" />
                 <ScalarProperty Name="TotalNoOfRatings" ColumnName="TotalNoOfRatings" />
                 <ScalarProperty Name="anySummaryOrClip" ColumnName="anySummaryOrClip" />
+                <ScalarProperty Name="TotalRatings" ColumnName="TotalRatings" />
+                <ScalarProperty Name="TotalRatingSum" ColumnName="TotalRatingSum" />
+                <ScalarProperty Name="AverageRating" ColumnName="AverageRating" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

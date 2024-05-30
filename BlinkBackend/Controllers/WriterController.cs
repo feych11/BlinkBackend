@@ -286,6 +286,9 @@ namespace BlinkBackend.Controllers
         }
 
 
+       
+
+
         [HttpPost]
         public HttpResponseMessage SentProject(SentProjects spro)
         {
@@ -918,6 +921,46 @@ namespace BlinkBackend.Controllers
                 db.SaveChanges();
 
                 return Request.CreateResponse(HttpStatusCode.OK, "Writer rating updated successfully");
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage UpdateMovieRating(int movieId, int rating)
+        {
+
+            using (var db = new BlinkMovie2Entities())
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                db.Configuration.ProxyCreationEnabled = false;
+                var movie = db.Movie.FirstOrDefault(w => w.Movie_ID == movieId);
+
+                if (movie == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "Movie not found");
+                }
+
+
+                if (rating < 0 || rating > 5)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Rating should be between 0 and 5");
+                }
+
+                int totalRatings = movie.TotalRatings ?? 0;
+                int  totalRatingSum = movie.TotalRatingSum ??0;
+                
+
+                totalRatings += 1;
+                totalRatingSum += rating;
+                double averageRating = (double)totalRatingSum / totalRatings;
+
+                movie.TotalRatings = totalRatings;
+                movie.TotalRatingSum = totalRatingSum;
+                movie.AverageRating = averageRating;
+
+
+                db.SaveChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK, "Movie rating updated successfully");
             }
         }
 
