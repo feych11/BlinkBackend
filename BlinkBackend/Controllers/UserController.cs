@@ -58,7 +58,8 @@ namespace BlinkBackend.Controllers
 
                 var imageFile = request.Files["Image"];
                 string username = request["UserName"];
-
+                string interest = request["Interest"];
+                
                 string role = request["Role"];
                 string password = request["Password"];
 
@@ -74,6 +75,9 @@ namespace BlinkBackend.Controllers
                         Email = email,
                         UserName = username,
                         Password = password,
+                        Interest = interest,
+                        Subscription="Free",
+
                     };
                     
 
@@ -121,6 +125,7 @@ namespace BlinkBackend.Controllers
                         Email = email,
                         UserName = username,
                         Password = password,
+                        Interest=interest
                     };
                     
 
@@ -178,6 +183,7 @@ namespace BlinkBackend.Controllers
                         Email = email,
                         UserName = username,
                         Password = password,
+                        Interest=interest,
                     };
 
 

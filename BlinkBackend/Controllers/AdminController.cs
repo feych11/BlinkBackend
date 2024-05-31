@@ -101,7 +101,23 @@ namespace BlinkBackend.Controllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+        [HttpGet]
+        public HttpResponseMessage ShowAllUser() 
+        {
+            BlinkMovie2Entities db = new BlinkMovie2Entities();
+            var Reader = db.Reader.Select(b => new
+            {
+                b.Reader_ID,
+                b.Subscription,
+                b.Interest,
+                b.Balance,
+                b.UserName,
+                b.Image,
+                b.Email
+            });
 
+            return Request.CreateResponse(HttpStatusCode.OK, Reader);
+        }
         [HttpGet]
         public HttpResponseMessage GetBalanceRequests()
         {
