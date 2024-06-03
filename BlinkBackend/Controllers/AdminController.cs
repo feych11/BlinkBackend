@@ -119,6 +119,37 @@ namespace BlinkBackend.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, Reader);
         }
         [HttpGet]
+        public HttpResponseMessage ShowAllWriters()
+        {
+            BlinkMovie2Entities db = new BlinkMovie2Entities();
+            var Writer = db.Writer.Select(b => new
+            {
+                b.Writer_ID,
+                b.UserName,
+                b.Interest,
+                b.Balance,
+                b.Image
+            });
+            return Request.CreateResponse(HttpStatusCode.OK, Writer);
+        }
+
+        [HttpGet]
+        public HttpResponseMessage ShowAllEditors()
+        {
+            BlinkMovie2Entities db = new BlinkMovie2Entities();
+            var Writer = db.Editor.Select(b => new
+            {
+                b.Editor_ID,
+                b.UserName,
+                b.Interest,
+                b.Email,
+                
+            });
+            return Request.CreateResponse(HttpStatusCode.OK, Writer);
+        }
+
+
+        [HttpGet]
         public HttpResponseMessage GetBalanceRequests()
         {
             BlinkMovie2Entities db = new BlinkMovie2Entities();
