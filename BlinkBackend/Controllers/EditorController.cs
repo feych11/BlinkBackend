@@ -489,10 +489,10 @@ namespace BlinkBackend.Controllers
 
 
         [HttpGet]
-        public HttpResponseMessage ViewSentProject(int Movie_ID)
+        public HttpResponseMessage ViewSentProject(int Movie_ID,int WriterID)
         {
             BlinkMovie2Entities db = new BlinkMovie2Entities();
-            var summary = db.Summary.Where(s => s.Movie_ID == Movie_ID).Select(s => new {
+            var summary = db.Summary.Where(s => s.Movie_ID == Movie_ID && s.Writer_ID==WriterID).Select(s => new {
                 s.Movie_ID,
                 s.Summary1,
                 s.Writer_ID
@@ -511,7 +511,7 @@ namespace BlinkBackend.Controllers
             if (mediaType == "Movie")
             {
                 clipsData = db.Clips
-                                .Where(s => s.Movie_ID == Movie_ID)
+                                .Where(s => s.Movie_ID == Movie_ID && s.Writer_ID==WriterID)
                                 .Select(s => new
                                 {
                                     s.Clips_ID,
