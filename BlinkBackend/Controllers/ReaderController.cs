@@ -793,12 +793,14 @@ namespace BlinkBackend.Controllers
                                 sp.Movie_Name,
                                 sp.Image,
                                 sp.Director,
-                                sp.Type
+                                sp.Type,
+                                sp.Genre
                             })
                             .FirstOrDefault(),
                             WriterData=db.Writer.Where(sp=>sp.Writer_ID==s.Writer_ID).Select(sp=>new
                             {
                                 sp.UserName,
+                                sp.Interest
                             }).FirstOrDefault(),
 
                         s.Status

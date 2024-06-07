@@ -90,6 +90,8 @@ namespace BlinkBackend.Controllers
             }
         }
 
+       
+
 
         [HttpGet]
         public HttpResponseMessage GetAllMoviesName()
@@ -100,7 +102,7 @@ namespace BlinkBackend.Controllers
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 };
-                var movies = db.Movie.Where(m => m.Type == "Movie").Select(w => new
+                var movies = db.Movie.Select(w => new
                 {
                     Id = w.Movie_ID,
                     Name = w.Name,
@@ -118,6 +120,38 @@ namespace BlinkBackend.Controllers
                 else
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound, "No movies found");
+                }
+            }
+        }
+
+
+        [HttpGet]
+        public HttpResponseMessage GetAllDramasName()
+        {
+            using (BlinkMovie2Entities db = new BlinkMovie2Entities())
+            {
+                var jsonSettings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                };
+                var movies = db.Movie.Where(m => m.Type == "Drama").Select(w => new
+                {
+                    Id = w.Movie_ID,
+                    Name = w.Name,
+                }).ToList();
+
+                if (movies.Any())
+                {
+                    string movieJson = JsonConvert.SerializeObject(movies, jsonSettings);
+
+                    HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+                    response.Content = new StringContent(movieJson, Encoding.UTF8, "application/json");
+                    return response;
+                    //return Request.CreateResponse(HttpStatusCode.OK, movies);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "No Drama found");
                 }
             }
         }
