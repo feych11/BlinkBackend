@@ -778,8 +778,7 @@ namespace BlinkBackend.Controllers
             using (BlinkMovie2Entities db = new BlinkMovie2Entities())
             {
                 var projects = db.SentProject
-                    .Where(s => s.Status == "Accepted" )
-                    .OrderByDescending(s => s.Send_at)
+                    .Where(s => s.Status == "Accepted")
                     .Select(s => new
                     {
                         s.Movie_ID,
@@ -797,14 +796,26 @@ namespace BlinkBackend.Controllers
                                 sp.Genre
                             })
                             .FirstOrDefault(),
-                            WriterData=db.Writer.Where(sp=>sp.Writer_ID==s.Writer_ID).Select(sp=>new
+                        WriterData = db.Writer
+                            .Where(w => w.Writer_ID == s.Writer_ID)
+                            .Select(w => new
                             {
-                                sp.UserName,
-                                sp.Interest
-                            }).FirstOrDefault(),
-
+                                w.UserName,
+                                w.Interest,
+                                w.AverageRating
+                            })
+                            .FirstOrDefault(),
+                        MovieData = db.Movie
+                            .Where(m => m.Movie_ID == s.Movie_ID)
+                            .Select(m => new
+                            {
+                                m.AverageRating
+                            })
+                            .FirstOrDefault(),
                         s.Status
                     })
+                    .ToList()
+                    .OrderByDescending(p => p.MovieData.AverageRating) // Order by Movie's AverageRating
                     .ToList();
 
                 var responseContent = new
@@ -815,6 +826,7 @@ namespace BlinkBackend.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, responseContent);
             }
         }
+
 
 
         [HttpPost]
