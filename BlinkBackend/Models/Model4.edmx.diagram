@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7f1408a5adc140a1bbb2c4adfcb615c1" Name="Diagram1">
+      <Diagram DiagramId="5a1520b0dae340148cf6ecc76f209b05" Name="Diagram1">
         <EntityTypeShape EntityType="BlinkMovie4Model.Admin" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BlinkMovie4Model.BalanceRequests" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
         <EntityTypeShape EntityType="BlinkMovie4Model.Clips" Width="1.5" PointX="3" PointY="18.25" IsExpanded="true" />

@@ -303,76 +303,76 @@
     <Compile Include="Classes\Log.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Models\Admin.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\BalanceRequests.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Clips.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DramasClips.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Editor.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Favorites.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\FreeMovie.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Genre.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetMovie.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\History.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Interests.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model3.Context.cs">
+    <Compile Include="Models\Model4.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model3.Context.tt</DependentUpon>
+      <DependentUpon>Model4.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model3.cs">
+    <Compile Include="Models\Model4.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model3.Designer.cs">
+    <Compile Include="Models\Model4.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model3.edmx</DependentUpon>
+      <DependentUpon>Model4.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Movie.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Reader.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ReaderRate.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SentProject.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SentProposals.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Summary.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Users.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Writer.cs">
-      <DependentUpon>Model3.tt</DependentUpon>
+      <DependentUpon>Model4.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -385,15 +385,15 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Models\Model3.Context.tt">
+    <Content Include="Models\Model4.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model3.edmx</DependentUpon>
-      <LastGenOutput>Model3.Context.cs</LastGenOutput>
+      <DependentUpon>Model4.edmx</DependentUpon>
+      <LastGenOutput>Model4.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Model3.tt">
+    <Content Include="Models\Model4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model3.edmx</DependentUpon>
-      <LastGenOutput>Model3.cs</LastGenOutput>
+      <DependentUpon>Model4.edmx</DependentUpon>
+      <LastGenOutput>Model4.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -417,12 +417,12 @@
     <Content Include="Areas\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Views\Web.config" />
     <Content Include="Areas\Views\_ViewStart.cshtml" />
-    <EntityDeploy Include="Models\Model3.edmx">
+    <EntityDeploy Include="Models\Model4.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model3.Designer.cs</LastGenOutput>
+      <LastGenOutput>Model4.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\Model3.edmx.diagram">
-      <DependentUpon>Model3.edmx</DependentUpon>
+    <Content Include="Models\Model4.edmx.diagram">
+      <DependentUpon>Model4.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />

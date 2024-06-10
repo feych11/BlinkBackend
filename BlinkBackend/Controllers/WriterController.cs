@@ -890,44 +890,10 @@ namespace BlinkBackend.Controllers
             }
         }
 
-        [HttpPost]
-        public HttpResponseMessage UpdateWriterRating(int writerId, int rating)
-        {
-            using (var db = new BlinkMovie2Entities())
-            {
-                var writer = db.Writer.FirstOrDefault(w => w.Writer_ID == writerId);
-
-                if (writer == null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "Writer not found");
-                }
-
-                if (rating < 0 || rating > 5)
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Rating should be between 0 and 5");
-                }
-
-                int totalRatings = writer.TotalRatings ?? 0;
-                int totalRatingSum = writer.TotalRatingSum ?? 0;
-
-                totalRatings += 1;
-                totalRatingSum += rating;
-                double averageRating = (double)totalRatingSum / totalRatings;
-
-                writer.TotalRatings = totalRatings;
-                writer.TotalRatingSum = totalRatingSum;
-                writer.AverageRating = averageRating;
-
-                db.SaveChanges();
-
-                return Request.CreateResponse(HttpStatusCode.OK, "Writer rating updated successfully");
-            }
-        }
 
         [HttpPost]
-        public HttpResponseMessage UpdateMovieRating(int movieId, int rating)
+        public HttpResponseMessage UpdateMovieRating(int Reader_ID, int movieId, double rating)
         {
-
             using (var db = new BlinkMovie2Entities())
             {
                 db.Configuration.LazyLoadingEnabled = false;
@@ -939,33 +905,159 @@ namespace BlinkBackend.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound, "Movie not found");
                 }
 
-
                 if (rating < 0 || rating > 5)
                 {
                     return Request.CreateResponse(HttpStatusCode.BadRequest, "Rating should be between 0 and 5");
                 }
 
-                int totalRatings = movie.TotalRatings ?? 0;
-                int  totalRatingSum = movie.TotalRatingSum ??0;
-                
+                var readerRating = db.ReaderRate.FirstOrDefault(rr => rr.Movie_ID == movieId && rr.Reader_ID == Reader_ID);
 
-                totalRatings += 1;
-                totalRatingSum += rating;
-                double averageRating = (double)totalRatingSum / totalRatings;
+                if (readerRating != null)
+                {
+                    var summary = db.Movie.FirstOrDefault(s => s.Movie_ID == movieId);
+                    if (summary != null)
+                    {
+                        summary.TotalRatings = (summary.TotalRatings ?? 0) - 1;
+                        summary.TotalRatingSum = (summary.TotalRatingSum ?? 0) - (readerRating.Movie_Rating ?? 0);
 
-                movie.TotalRatings = totalRatings;
-                movie.TotalRatingSum = totalRatingSum;
-                movie.AverageRating = averageRating;
+                        db.SaveChanges();
+                    }
 
+                    int? totalRatings = (movie.TotalRatings ?? 0) + 1;
+                    double? totalRatingSum = (movie.TotalRatingSum ?? 0) + rating;
+                    double? averageRating = totalRatings.HasValue && totalRatings > 0 ? (double)totalRatingSum / totalRatings : 0;
 
-                db.SaveChanges();
+                    movie.TotalRatings = totalRatings;
+                    movie.TotalRatingSum = totalRatingSum;
+                    movie.AverageRating = averageRating;
+
+                    db.ReaderRate.Remove(readerRating);
+                    db.SaveChanges();
+
+                    var readerRate = new ReaderRate
+                    {
+                        ReaderRate_ID = GenerateId(),
+                        Movie_ID = movieId,
+                        Reader_ID = Reader_ID,
+                        Movie_Rating = rating
+                    };
+
+                    db.ReaderRate.Add(readerRate);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    int? totalRatings = (movie.TotalRatings ?? 0) + 1;
+                    double? totalRatingSum = (movie.TotalRatingSum ?? 0) + rating;
+                    double? averageRating = totalRatings.HasValue && totalRatings > 0 ? (double)totalRatingSum / totalRatings : 0;
+
+                    movie.TotalRatings = totalRatings;
+                    movie.TotalRatingSum = totalRatingSum;
+                    movie.AverageRating = averageRating;
+
+                    var readerRate = new ReaderRate
+                    {
+                        ReaderRate_ID = GenerateId(),
+                        Movie_ID = movieId,
+                        Reader_ID = Reader_ID,
+                        Movie_Rating = rating
+                    };
+
+                    db.ReaderRate.Add(readerRate);
+                    db.SaveChanges();
+                }
 
                 return Request.CreateResponse(HttpStatusCode.OK, "Movie rating updated successfully");
             }
         }
 
 
+
+
+
+        [HttpPost]
+        public HttpResponseMessage UpdateWriterRating(int Reader_ID, int writerId, double rating)
+        {
+            using (var db = new BlinkMovie2Entities())
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                db.Configuration.ProxyCreationEnabled = false;
+                var writer = db.Writer.FirstOrDefault(w => w.Writer_ID == writerId);
+
+                if (writer == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "Movie not found");
+                }
+
+                if (rating < 0 || rating > 5)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Rating should be between 0 and 5");
+                }
+
+                var readerRating = db.ReaderRate.FirstOrDefault(rr => rr.Writer_ID == writerId && rr.Reader_ID == Reader_ID);
+
+                if (readerRating != null)
+                {
+                    var summary = db.Writer.FirstOrDefault(s => s.Writer_ID == writerId);
+                    if (summary != null)
+                    {
+                        summary.TotalRatings = (summary.TotalRatings ?? 0) - 1;
+                        summary.TotalRatingSum = (summary.TotalRatingSum ?? 0) - (readerRating.Movie_Rating ?? 0);
+
+                        db.SaveChanges();
+                    }
+
+                    int? totalRatings = (writer.TotalRatings ?? 0) + 1;
+                    double? totalRatingSum = (writer.TotalRatingSum ?? 0) + rating;
+                    double? averageRating = totalRatings.HasValue && totalRatings > 0 ? (double)totalRatingSum / totalRatings : 0;
+
+                    writer.TotalRatings = totalRatings;
+                    writer.TotalRatingSum = totalRatingSum;
+                    writer.AverageRating = averageRating;
+
+                    db.ReaderRate.Remove(readerRating);
+                    db.SaveChanges();
+
+                    var readerRate = new ReaderRate
+                    {
+                        ReaderRate_ID = GenerateId(),
+                        Writer_ID = writerId,
+                        Reader_ID = Reader_ID,
+                        Writer_Rating = rating
+                    };
+
+                    db.ReaderRate.Add(readerRate);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    int? totalRatings = (writer.TotalRatings ?? 0) + 1;
+                    double? totalRatingSum = (writer.TotalRatingSum ?? 0) + rating;
+                    double? averageRating = totalRatings.HasValue && totalRatings > 0 ? (double)totalRatingSum / totalRatings : 0;
+
+                    writer.TotalRatings = totalRatings;
+                    writer.TotalRatingSum = totalRatingSum;
+                    writer.AverageRating = averageRating;
+
+                    var readerRate = new ReaderRate
+                    {
+                        ReaderRate_ID = GenerateId(),
+                        Writer_ID = writerId,
+                        Reader_ID = Reader_ID,
+                        Writer_Rating = rating
+                    };
+
+                    db.ReaderRate.Add(readerRate);
+                    db.SaveChanges();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, "Writer Rating Updated Successfully!!!");
+            }
+        }
     }
 
 
 }
+
+
+

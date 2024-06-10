@@ -38,7 +38,7 @@ namespace BlinkBackend.Models
         public Nullable<int> Balance { get; set; }
         public Nullable<double> Rating { get; set; }
         public Nullable<int> TotalRatings { get; set; }
-        public Nullable<int> TotalRatingSum { get; set; }
+        public Nullable<double> TotalRatingSum { get; set; }
         public Nullable<double> AverageRating { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

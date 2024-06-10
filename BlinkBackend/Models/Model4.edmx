@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BlinkMovie2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="BlinkMovie4Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Admin_ID" />
@@ -136,6 +136,9 @@
           <Property Name="Rating" Type="float" />
           <Property Name="TotalNoOfRatings" Type="int" />
           <Property Name="anySummaryOrClip" Type="bit" />
+          <Property Name="TotalRatings" Type="int" />
+          <Property Name="TotalRatingSum" Type="float" />
+          <Property Name="AverageRating" Type="float" />
         </EntityType>
         <EntityType Name="Reader">
           <Key>
@@ -235,7 +238,7 @@
           <Property Name="Balance" Type="int" />
           <Property Name="Rating" Type="float" />
           <Property Name="TotalRatings" Type="int" />
-          <Property Name="TotalRatingSum" Type="int" />
+          <Property Name="TotalRatingSum" Type="float" />
           <Property Name="AverageRating" Type="float" />
         </EntityType>
         <Association Name="FK__BalanceRe__Reade__68487DD7">
@@ -574,7 +577,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="BlinkMovie2ModelStoreContainer">
+        <EntityContainer Name="BlinkMovie4ModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BalanceRequests" EntityType="Self.BalanceRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clips" EntityType="Self.Clips" Schema="dbo" store:Type="Tables" />
@@ -711,7 +714,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="BlinkMovie2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="BlinkMovie4Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Admin_ID" />
@@ -742,7 +745,7 @@
           <Property Name="Sent_ID" Type="Int32" />
           <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="UploadDate" Type="DateTime" />
+          <Property Name="UploadDate" Type="DateTime" Precision="0" />
           <Property Name="Start_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="End_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="isCompoundClip" Type="Boolean" />
@@ -863,6 +866,9 @@
           <Property Name="Rating" Type="Double" />
           <Property Name="TotalNoOfRatings" Type="Int32" />
           <Property Name="anySummaryOrClip" Type="Boolean" />
+          <Property Name="TotalRatings" Type="Int32" />
+          <Property Name="TotalRatingSum" Type="Double" />
+          <Property Name="AverageRating" Type="Double" />
           <NavigationProperty Name="Clips" Relationship="Self.FK__Clips__MID__6383C8BA" FromRole="Movie" ToRole="Clips" />
           <NavigationProperty Name="DramasClips" Relationship="Self.FK__DramasCli__Movie__6D0D32F4" FromRole="Movie" ToRole="DramasClips" />
           <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__MID__7B5B524B" FromRole="Movie" ToRole="Favorites" />
@@ -953,7 +959,7 @@
           <Property Name="Sent_ID" Type="Int32" />
           <Property Name="Movie_ID" Type="Int32" />
           <Property Name="Writer_ID" Type="Int32" />
-          <Property Name="UploadDate" Type="DateTime" />
+          <Property Name="UploadDate" Type="DateTime" Precision="0" />
           <Property Name="Summary1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Episode" Type="Int32" />
           <NavigationProperty Name="GetMovie" Relationship="Self.FK__GetMovie__Summar__70DDC3D8" FromRole="Summary" ToRole="GetMovie" />
@@ -988,7 +994,7 @@
           <Property Name="Balance" Type="Int32" />
           <Property Name="Rating" Type="Double" />
           <Property Name="TotalRatings" Type="Int32" />
-          <Property Name="TotalRatingSum" Type="Int32" />
+          <Property Name="TotalRatingSum" Type="Double" />
           <Property Name="AverageRating" Type="Double" />
           <NavigationProperty Name="Clips" Relationship="Self.FK__Clips__WID__628FA481" FromRole="Writer" ToRole="Clips" />
           <NavigationProperty Name="DramasClips" Relationship="Self.FK__DramasCli__Write__6B24EA82" FromRole="Writer" ToRole="DramasClips" />
@@ -1475,9 +1481,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BlinkMovie2ModelStoreContainer" CdmEntityContainer="BlinkMovie2Entities">
+        <EntityContainerMapping StorageEntityContainer="BlinkMovie4ModelStoreContainer" CdmEntityContainer="BlinkMovie2Entities">
           <EntitySetMapping Name="Admin">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Admin">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Admin">
               <MappingFragment StoreEntitySet="Admin">
                 <ScalarProperty Name="Admin_ID" ColumnName="Admin_ID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -1486,7 +1492,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BalanceRequests">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.BalanceRequests">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.BalanceRequests">
               <MappingFragment StoreEntitySet="BalanceRequests">
                 <ScalarProperty Name="Balance_ID" ColumnName="Balance_ID" />
                 <ScalarProperty Name="Reader_ID" ColumnName="Reader_ID" />
@@ -1498,7 +1504,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Clips">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Clips">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Clips">
               <MappingFragment StoreEntitySet="Clips">
                 <ScalarProperty Name="Clips_ID" ColumnName="Clips_ID" />
                 <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
@@ -1516,7 +1522,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DramasClips">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.DramasClips">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.DramasClips">
               <MappingFragment StoreEntitySet="DramasClips">
                 <ScalarProperty Name="DramasClip_ID" ColumnName="DramasClip_ID" />
                 <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
@@ -1533,7 +1539,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Editor">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Editor">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Editor">
               <MappingFragment StoreEntitySet="Editor">
                 <ScalarProperty Name="Editor_ID" ColumnName="Editor_ID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1544,7 +1550,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Favorites">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Favorites">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Favorites">
               <MappingFragment StoreEntitySet="Favorites">
                 <ScalarProperty Name="Favorites_ID" ColumnName="Favorites_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
@@ -1554,7 +1560,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="FreeMovie">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.FreeMovie">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.FreeMovie">
               <MappingFragment StoreEntitySet="FreeMovie">
                 <ScalarProperty Name="FreeMovie_ID" ColumnName="FreeMovie_ID" />
                 <ScalarProperty Name="Reader_ID" ColumnName="Reader_ID" />
@@ -1566,7 +1572,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Genre">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Genre">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Genre">
               <MappingFragment StoreEntitySet="Genre">
                 <ScalarProperty Name="Genre_ID" ColumnName="Genre_ID" />
                 <ScalarProperty Name="Genre_Name" ColumnName="Genre_Name" />
@@ -1574,7 +1580,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GetMovie">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.GetMovie">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.GetMovie">
               <MappingFragment StoreEntitySet="GetMovie">
                 <ScalarProperty Name="GetMovie_ID" ColumnName="GetMovie_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
@@ -1586,7 +1592,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="History">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.History">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.History">
               <MappingFragment StoreEntitySet="History">
                 <ScalarProperty Name="History_ID" ColumnName="History_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
@@ -1596,7 +1602,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Interests">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Interests">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Interests">
               <MappingFragment StoreEntitySet="Interests">
                 <ScalarProperty Name="Interest_ID" ColumnName="Interest_ID" />
                 <ScalarProperty Name="Interests1" ColumnName="Interests" />
@@ -1604,7 +1610,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Movie">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Movie">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Movie">
               <MappingFragment StoreEntitySet="Movie">
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -1617,11 +1623,14 @@
                 <ScalarProperty Name="Rating" ColumnName="Rating" />
                 <ScalarProperty Name="TotalNoOfRatings" ColumnName="TotalNoOfRatings" />
                 <ScalarProperty Name="anySummaryOrClip" ColumnName="anySummaryOrClip" />
+                <ScalarProperty Name="TotalRatings" ColumnName="TotalRatings" />
+                <ScalarProperty Name="TotalRatingSum" ColumnName="TotalRatingSum" />
+                <ScalarProperty Name="AverageRating" ColumnName="AverageRating" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Reader">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Reader">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Reader">
               <MappingFragment StoreEntitySet="Reader">
                 <ScalarProperty Name="Reader_ID" ColumnName="Reader_ID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1635,7 +1644,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ReaderRate">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.ReaderRate">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.ReaderRate">
               <MappingFragment StoreEntitySet="ReaderRate">
                 <ScalarProperty Name="ReaderRate_ID" ColumnName="ReaderRate_ID" />
                 <ScalarProperty Name="Reader_ID" ColumnName="Reader_ID" />
@@ -1647,7 +1656,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SentProject">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.SentProject">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.SentProject">
               <MappingFragment StoreEntitySet="SentProject">
                 <ScalarProperty Name="SentProject_ID" ColumnName="SentProject_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
@@ -1663,7 +1672,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SentProposals">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.SentProposals">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.SentProposals">
               <MappingFragment StoreEntitySet="SentProposals">
                 <ScalarProperty Name="SentProposal_ID" ColumnName="SentProposal_ID" />
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
@@ -1686,7 +1695,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Summary">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Summary">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Summary">
               <MappingFragment StoreEntitySet="Summary">
                 <ScalarProperty Name="Summary_ID" ColumnName="Summary_ID" />
                 <ScalarProperty Name="Sent_ID" ColumnName="Sent_ID" />
@@ -1699,7 +1708,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Users">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Users">
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="User_ID" ColumnName="User_ID" />
                 <ScalarProperty Name="Editor_ID" ColumnName="Editor_ID" />
@@ -1712,7 +1721,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Writer">
-            <EntityTypeMapping TypeName="BlinkMovie2Model.Writer">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Writer">
               <MappingFragment StoreEntitySet="Writer">
                 <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1745,6 +1754,7 @@
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
