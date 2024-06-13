@@ -378,38 +378,72 @@ namespace BlinkBackend.Controllers
             }
         }
         [HttpGet]
-        public HttpResponseMessage GetFavoriteDetails(int Reader_ID)
+        public HttpResponseMessage GetReaderFavoriteMovies(int readerId)
+        {
+            using (BlinkMovie2Entities db = new BlinkMovie2Entities())
+            {
+                try
+                {
+                    var favoriteMovies = db.Favorites
+                        .Where(f => f.Reader_ID == readerId)
+                        .Join(db.Movie,
+                              f => f.Movie_ID,
+                              m => m.Movie_ID,
+                              (f, m) => new { f, m })
+                        .Join(db.Writer,
+                              fm => fm.f.Writer_ID,
+                              w => w.Writer_ID,
+                              (fm, w) => new
+                              {
+                                  Favorites_ID = fm.f.Favorites_ID,
+                                  MovieId = fm.m.Movie_ID,
+                                  MovieName = fm.m.Name,
+                                  MovieImage = fm.m.Image,
+                                  Writer_ID = w.Writer_ID,
+                                  Type = fm.m.Type,
+                                  WriterName = w.UserName,
+                                  WriterImage = w.Image,
+                                  isFavorited = true,
+                                  MovieRating=fm.m.AverageRating,
+                                  WriterRating=w.AverageRating,
+                              }).Distinct()
+                        .ToList();
+
+                    if (favoriteMovies == null || !favoriteMovies.Any())
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound, "No favorite movies found for the given reader.");
+                    }
+
+                    return Request.CreateResponse(HttpStatusCode.OK, favoriteMovies);
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+                }
+            }
+        }
+
+
+        [HttpPost]
+
+        public HttpResponseMessage RemovefromFavorites(int Favorites_ID)
         {
             try
             {
-                using (var db = new BlinkMovie2Entities())
-                {
-                    var result = db.Favorites
-                        .Where(fav => fav.Reader_ID == Reader_ID)
-                        .Join(db.Writer, fav => fav.Writer_ID, writer => writer.Writer_ID, (fav, writer) => new { fav, writer })
-                        .Join(db.Movie, x => x.fav.Movie_ID, movie => movie.Movie_ID, (x, movie) => new { x.fav, x.writer, movie })
-                        .ToList();
+                BlinkMovie2Entities db = new BlinkMovie2Entities();
 
-                    var details = result.Select(x => new
-                    {
-                        ReaderId = x.fav.Reader_ID,
-                        WriterId = x.fav.Writer_ID,
-                        MovieId = x.fav.Movie_ID,
-                        WriterName = x.writer.UserName,
-                        MovieTitle = x.movie.Name,
-                        Director = x.movie.Director,
-                        Image=x.movie.Image,
-                        MovieRating = x.movie.AverageRating,
-                        WriterRating = x.writer.AverageRating,
+                var favorite = db.Favorites.Where(f => f.Favorites_ID == Favorites_ID).FirstOrDefault();
 
-                    }).ToList<object>();
+                db.Favorites.Remove(favorite);
+                db.SaveChanges();
 
-                    return Request.CreateResponse(HttpStatusCode.OK, details);
-                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, "Removed from Favorites");
+
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
 
