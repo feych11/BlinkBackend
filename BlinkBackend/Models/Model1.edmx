@@ -139,6 +139,7 @@
           <Property Name="TotalRatings" Type="int" />
           <Property Name="TotalRatingSum" Type="float" />
           <Property Name="AverageRating" Type="float" />
+          <Property Name="Cast" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Reader">
           <Key>
@@ -200,6 +201,7 @@
           <Property Name="DueDate" Type="varchar(max)" />
           <Property Name="Writer_Notification" Type="bit" />
           <Property Name="Editor_Notification" Type="bit" />
+          <Property Name="Cast" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Summary">
           <Key>
@@ -869,6 +871,7 @@
           <Property Name="TotalRatings" Type="Int32" />
           <Property Name="TotalRatingSum" Type="Double" />
           <Property Name="AverageRating" Type="Double" />
+          <Property Name="Cast" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Clips" Relationship="Self.FK__Clips__MID__6383C8BA" FromRole="Movie" ToRole="Clips" />
           <NavigationProperty Name="DramasClips" Relationship="Self.FK__DramasCli__Movie__6D0D32F4" FromRole="Movie" ToRole="DramasClips" />
           <NavigationProperty Name="Favorites" Relationship="Self.FK__Favorites__MID__7B5B524B" FromRole="Movie" ToRole="Favorites" />
@@ -948,6 +951,7 @@
           <Property Name="DueDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Writer_Notification" Type="Boolean" />
           <Property Name="Editor_Notification" Type="Boolean" />
+          <Property Name="Cast" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Editor" Relationship="Self.FK__SentProposa__EID__24927208" FromRole="SentProposals" ToRole="Editor" />
           <NavigationProperty Name="Writer" Relationship="Self.FK__SentProposa__WID__25869641" FromRole="SentProposals" ToRole="Writer" />
         </EntityType>
@@ -1626,6 +1630,7 @@
                 <ScalarProperty Name="TotalRatings" ColumnName="TotalRatings" />
                 <ScalarProperty Name="TotalRatingSum" ColumnName="TotalRatingSum" />
                 <ScalarProperty Name="AverageRating" ColumnName="AverageRating" />
+                <ScalarProperty Name="Cast" ColumnName="Cast" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1691,6 +1696,7 @@
                 <ScalarProperty Name="DueDate" ColumnName="DueDate" />
                 <ScalarProperty Name="Writer_Notification" ColumnName="Writer_Notification" />
                 <ScalarProperty Name="Editor_Notification" ColumnName="Editor_Notification" />
+                <ScalarProperty Name="Cast" ColumnName="Cast" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -4,26 +4,26 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5a1520b0dae340148cf6ecc76f209b05" Name="Diagram1">
+      <Diagram DiagramId="fa8c626052234fa9bd071506fbdfd312" Name="Diagram1">
         <EntityTypeShape EntityType="BlinkMovie4Model.Admin" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.BalanceRequests" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.Clips" Width="1.5" PointX="3" PointY="18.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.DramasClips" Width="1.5" PointX="6" PointY="18.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.Editor" Width="1.5" PointX="3.75" PointY="26.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.Favorites" Width="1.5" PointX="3" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.BalanceRequests" Width="1.5" PointX="3" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.Clips" Width="1.5" PointX="3" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.DramasClips" Width="1.5" PointX="6" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.Editor" Width="1.5" PointX="3.75" PointY="27" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.Favorites" Width="1.5" PointX="3" PointY="15.125" IsExpanded="true" />
         <EntityTypeShape EntityType="BlinkMovie4Model.FreeMovie" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BlinkMovie4Model.Genre" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.GetMovie" Width="1.5" PointX="11.25" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.History" Width="1.5" PointX="3" PointY="23" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.GetMovie" Width="1.5" PointX="11.25" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.History" Width="1.5" PointX="3" PointY="23.125" IsExpanded="true" />
         <EntityTypeShape EntityType="BlinkMovie4Model.Interests" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BlinkMovie4Model.Movie" Width="1.5" PointX="6.75" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.Reader" Width="1.5" PointX="0.75" PointY="12.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.ReaderRate" Width="1.5" PointX="6" PointY="14.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.SentProject" Width="1.5" PointX="6" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.Reader" Width="1.5" PointX="0.75" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.ReaderRate" Width="1.5" PointX="6" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.SentProject" Width="1.5" PointX="6" PointY="23.5" IsExpanded="true" />
         <EntityTypeShape EntityType="BlinkMovie4Model.SentProposals" Width="1.5" PointX="9" PointY="17.875" IsExpanded="true" />
         <EntityTypeShape EntityType="BlinkMovie4Model.Summary" Width="1.5" PointX="9" PointY="13.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BlinkMovie4Model.Users" Width="1.5" PointX="9" PointY="23.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlinkMovie4Model.Writer" Width="1.5" PointX="0.75" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlinkMovie4Model.Writer" Width="1.5" PointX="0.75" PointY="17.75" IsExpanded="true" />
         <AssociationConnector Association="BlinkMovie4Model.FK__BalanceRe__Reade__68487DD7" ManuallyRouted="false" />
         <AssociationConnector Association="BlinkMovie4Model.FK__Clips__MID__6383C8BA" ManuallyRouted="false" />
         <AssociationConnector Association="BlinkMovie4Model.FK__Clips__WID__628FA481" ManuallyRouted="false" />

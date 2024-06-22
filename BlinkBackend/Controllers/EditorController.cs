@@ -355,7 +355,7 @@ namespace BlinkBackend.Controllers
             string dueDate = request["DueDate"];
             DateTime currentDate = DateTime.Now;
             int amount = Int32.Parse(request["Amount"]);
-
+            string cast = request["Cast"];
             var imageFile = request.Files["Image"];
             //string coverImage = request["Cover_Image"];
 
@@ -379,6 +379,7 @@ namespace BlinkBackend.Controllers
                         Genre = genre,
                         Type = type,
                         Director = director,
+                        Cast = cast,
                         DueDate = dueDate,
                         Status = "Sent",
                         Episode = episode,
@@ -412,6 +413,7 @@ namespace BlinkBackend.Controllers
                         Category = genre,
                         Type = type,
                         Director = director,
+                        Cast = cast,
                         anySummaryOrClip = false
                     };
 
@@ -446,6 +448,7 @@ namespace BlinkBackend.Controllers
                         Genre = genre,
                         Type = type,
                         Director = director,
+                        Cast = cast,
                         DueDate = dueDate,
                         Episode = episode,
                         Sent_at = currentDate.ToString("yyyy-MM-dd HH:mm:ss"),

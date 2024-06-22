@@ -40,6 +40,7 @@ namespace BlinkBackend.Models
         public Nullable<int> TotalRatings { get; set; }
         public Nullable<double> TotalRatingSum { get; set; }
         public Nullable<double> AverageRating { get; set; }
+        public string Cast { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Clips> Clips { get; set; }

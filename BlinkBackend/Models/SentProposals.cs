@@ -31,6 +31,7 @@ namespace BlinkBackend.Models
         public string DueDate { get; set; }
         public Nullable<bool> Writer_Notification { get; set; }
         public Nullable<bool> Editor_Notification { get; set; }
+        public string Cast { get; set; }
     
         public virtual Editor Editor { get; set; }
         public virtual Writer Writer { get; set; }
