@@ -763,11 +763,11 @@ namespace BlinkBackend.Controllers
                 BlinkMovie2Entities db = new BlinkMovie2Entities();
 
 
-                var writerNotifications = db.SentProject
+                var writerNotifications = db.SentProposals
                                             .Where(sp => sp.Writer_Notification == true && sp.Writer_ID == writerId)
                                             .Select(sp => new
                                             {
-                                                SentProject_ID = sp.SentProject_ID,
+                                                SentProposal_Id = sp.SentProposal_ID,
                                                 Status = sp.Status
                                             })
                                             .ToList();
@@ -803,16 +803,16 @@ namespace BlinkBackend.Controllers
                 BlinkMovie2Entities db = new BlinkMovie2Entities();
 
 
-                var sentProjects = db.SentProject.Where(sp => sp.Writer_ID == writerId).ToList();
+                var sentProposals = db.SentProposals.Where(sp => sp.Writer_ID == writerId).ToList();
 
-                if (sentProjects.Count == 0)
+                if (sentProposals.Count == 0)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound, "No SentProject records found for the specified writer");
                 }
 
-                foreach (var sentProject in sentProjects)
+                foreach (var sentProposal in sentProposals)
                 {
-                    sentProject.Writer_Notification = false;
+                    sentProposal.Writer_Notification = false;
                 }
 
                 db.SaveChanges();
