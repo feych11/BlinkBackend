@@ -849,8 +849,6 @@ namespace BlinkBackend.Controllers
                         s.Status
                     })
                     .ToList()
-                    .GroupBy(p => p.Movie_ID)
-                    .Select(g => g.OrderByDescending(p => p.MovieData.AverageRating).FirstOrDefault())
                     .OrderByDescending(p => p.MovieData.AverageRating) // Order by Movie's AverageRating
                     .ToList();
 
@@ -862,6 +860,7 @@ namespace BlinkBackend.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, responseContent);
             }
         }
+
 
 
 

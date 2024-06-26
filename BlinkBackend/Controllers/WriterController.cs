@@ -803,16 +803,16 @@ namespace BlinkBackend.Controllers
                 BlinkMovie2Entities db = new BlinkMovie2Entities();
 
 
-                var sentProposals = db.SentProposals.Where(sp => sp.Writer_ID == writerId).ToList();
+                var sentProjects = db.SentProject.Where(sp => sp.Writer_ID == writerId).ToList();
 
-                if (sentProposals.Count == 0)
+                if (sentProjects.Count == 0)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound, "No SentProject records found for the specified writer");
                 }
 
-                foreach (var sentProposal in sentProposals)
+                foreach (var sentProject in sentProjects)
                 {
-                    sentProposal.Writer_Notification = false;
+                    sentProject.Writer_Notification = false;
                 }
 
                 db.SaveChanges();
