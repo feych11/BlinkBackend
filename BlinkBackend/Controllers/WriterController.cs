@@ -978,42 +978,44 @@ namespace BlinkBackend.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateWriterRating(int Reader_ID, int writerId, double rating)
         {
+
             using (var db = new BlinkMovie2Entities())
             {
                 db.Configuration.LazyLoadingEnabled = false;
                 db.Configuration.ProxyCreationEnabled = false;
-                var writer = db.Writer.FirstOrDefault(w => w.Writer_ID == writerId);
+                var writr = db.Writer.FirstOrDefault(w => w.Writer_ID == writerId);
 
-                if (writer == null)
+                if (writr == null)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound, "Movie not found");
                 }
+
 
                 if (rating < 0 || rating > 5)
                 {
                     return Request.CreateResponse(HttpStatusCode.BadRequest, "Rating should be between 0 and 5");
                 }
 
-                var readerRating = db.ReaderRate.FirstOrDefault(rr => rr.Writer_ID == writerId && rr.Reader_ID == Reader_ID);
+                var readerRating = db.ReaderRate.Where(rr => rr.Writer_ID == writerId && rr.Reader_ID == Reader_ID).FirstOrDefault();
+                var writer = db.Writer.Where(s => s.Writer_ID == writerId).FirstOrDefault();
+                int? totalRatings = writr.TotalRatings + 1;
+                double? totalRatingSum = writr.TotalRatingSum + rating;
+                double? averageRating = (double)totalRatingSum / totalRatings;
 
                 if (readerRating != null)
                 {
-                    var summary = db.Writer.FirstOrDefault(s => s.Writer_ID == writerId);
-                    if (summary != null)
-                    {
-                        summary.TotalRatings = (summary.TotalRatings ?? 0) - 1;
-                        summary.TotalRatingSum = (summary.TotalRatingSum ?? 0) - (readerRating.Movie_Rating ?? 0);
 
-                        db.SaveChanges();
-                    }
+                    writer.TotalRatings = writer.TotalRatings - 1;
+                    writer.TotalRatingSum = writer.TotalRatingSum - readerRating.Movie_Rating;
 
-                    int? totalRatings = (writer.TotalRatings ?? 0) + 1;
-                    double? totalRatingSum = (writer.TotalRatingSum ?? 0) + rating;
-                    double? averageRating = totalRatings.HasValue && totalRatings > 0 ? (double)totalRatingSum / totalRatings : 0;
+                    db.SaveChanges();
 
-                    writer.TotalRatings = totalRatings;
-                    writer.TotalRatingSum = totalRatingSum;
-                    writer.AverageRating = averageRating;
+
+
+                    writr.TotalRatings = totalRatings;
+                    writr.TotalRatingSum = totalRatingSum;
+                    writr.AverageRating = averageRating;
+
 
                     db.ReaderRate.Remove(readerRating);
                     db.SaveChanges();
@@ -1026,18 +1028,17 @@ namespace BlinkBackend.Controllers
                         Writer_Rating = rating
                     };
 
+
                     db.ReaderRate.Add(readerRate);
                     db.SaveChanges();
                 }
+
                 else
                 {
-                    int? totalRatings = (writer.TotalRatings ?? 0) + 1;
-                    double? totalRatingSum = (writer.TotalRatingSum ?? 0) + rating;
-                    double? averageRating = totalRatings.HasValue && totalRatings > 0 ? (double)totalRatingSum / totalRatings : 0;
 
-                    writer.TotalRatings = totalRatings;
-                    writer.TotalRatingSum = totalRatingSum;
-                    writer.AverageRating = averageRating;
+                    writr.TotalRatings = totalRatings;
+                    writr.TotalRatingSum = totalRatingSum;
+                    writr.AverageRating = averageRating;
 
                     var readerRate = new ReaderRate
                     {
@@ -1047,11 +1048,36 @@ namespace BlinkBackend.Controllers
                         Writer_Rating = rating
                     };
 
+
                     db.ReaderRate.Add(readerRate);
                     db.SaveChanges();
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, "Writer Rating Updated Successfully!!!");
+                if (writr.TotalRatings > 4 && writer.AverageRating > 4.5)
+                {
+                    var addToEditor = new Editor
+                    {
+                        Editor_ID = GenerateId(),
+                        UserName = writr.UserName,
+                        Email = writr.Email,
+                        Password = writr.Password
+                    };
+
+                    db.Editor.Add(addToEditor);
+                    db.SaveChanges();
+
+                    var changeRole = db.Users.Where(u => u.Writer_ID == writerId).FirstOrDefault();
+                    changeRole.Editor_ID = addToEditor.Editor_ID;
+                    changeRole.Writer_ID = null;
+                    changeRole.Role = "Editor";
+
+                    db.SaveChanges();
+                }
+
+                db.SaveChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK, "Movie rating updated successfully");
+
             }
         }
     }

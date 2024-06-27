@@ -168,23 +168,54 @@ namespace BlinkBackend.Controllers
         }
 
         [HttpGet]
-
         public HttpResponseMessage GetSpecificMovie(int Movie_ID)
         {
-            BlinkMovie2Entities db = new BlinkMovie2Entities();
-            db.Configuration.LazyLoadingEnabled = false;
-
-            var movies = db.Movie.FirstOrDefault(m => m.Movie_ID == Movie_ID);
-            if (movies != null)
+            try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, movies);
-            }
+                using (var db = new BlinkMovie2Entities())
+                {
+                    db.Configuration.LazyLoadingEnabled = false;
 
-            else
+                    var movieData = db.Movie
+                        .Where(m => m.Movie_ID == Movie_ID)
+                        .Select(m => new
+                        {
+                            Movie = m,
+                            Writers = db.Summary
+                                .Where(s => s.Movie_ID == Movie_ID)
+                                .Select(s => new
+                                {
+                                    s.Writer_ID,
+                                    WriterUserName = db.Writer
+                                        .Where(w => w.Writer_ID == s.Writer_ID)
+                                        .Select(w => w.UserName)
+                                        .FirstOrDefault()
+                                })
+                                .ToList()
+                        })
+                        .FirstOrDefault();
+
+                    if (movieData != null)
+                    {
+                        var response = new
+                        {
+                            movies = movieData.Movie,
+                            Writers = movieData.Writers,
+                            count = movieData.Writers.Count()
+                        };
+
+                        return Request.CreateResponse(HttpStatusCode.OK, response);
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(HttpStatusCode.NotFound, "Data not found");
+                    }
+                }
+            }
+            catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Data not found");
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, $"An error occurred: {ex.Message}");
             }
-
         }
 
         [HttpGet]
