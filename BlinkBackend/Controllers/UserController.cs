@@ -265,6 +265,21 @@ namespace BlinkBackend.Controllers
                         }).FirstOrDefault();
                         break;
 
+                    case "company":
+                        additionalInfo = db.Company.Where(r => r.Company_ID == user.Company_ID).Select(r => new
+                        {
+                            r.Company_ID,
+                            r.Email,
+                            r.Name,
+                            r.Password,
+                            r.Image,
+                            
+                            r.Balance,
+                           
+
+                        }).FirstOrDefault();
+                        break;
+
                     case "editor":
                         additionalInfo = db.Editor.Where(e => e.Editor_ID == user.Editor_ID).Select(e => new
                         {

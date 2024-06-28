@@ -12,19 +12,11 @@ namespace BlinkBackend.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class Advertismet
     {
-        public int User_ID { get; set; }
-        public Nullable<int> Editor_ID { get; set; }
+        public int Ad_ID { get; set; }
+        public string Url { get; set; }
         public Nullable<int> Company_ID { get; set; }
-        public Nullable<int> Writer_ID { get; set; }
-        public Nullable<int> Reader_ID { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
-    
-        public virtual Editor Editor { get; set; }
-        public virtual Reader Reader { get; set; }
-        public virtual Writer Writer { get; set; }
+        public Nullable<int> count { get; set; }
     }
 }

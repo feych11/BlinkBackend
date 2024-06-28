@@ -26,8 +26,10 @@ namespace BlinkBackend.Models
         }
     
         public virtual DbSet<Admin> Admin { get; set; }
+        public virtual DbSet<Advertismet> Advertismet { get; set; }
         public virtual DbSet<BalanceRequests> BalanceRequests { get; set; }
         public virtual DbSet<Clips> Clips { get; set; }
+        public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<DramasClips> DramasClips { get; set; }
         public virtual DbSet<Editor> Editor { get; set; }
         public virtual DbSet<Favorites> Favorites { get; set; }

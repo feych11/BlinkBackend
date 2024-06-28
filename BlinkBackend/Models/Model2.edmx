@@ -13,6 +13,15 @@
           <Property Name="UserName" Type="varchar(max)" />
           <Property Name="Email" Type="varchar(max)" />
         </EntityType>
+        <EntityType Name="Advertismet">
+          <Key>
+            <PropertyRef Name="Ad_ID" />
+          </Key>
+          <Property Name="Ad_ID" Type="int" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="50" />
+          <Property Name="Company_ID" Type="int" />
+          <Property Name="count" Type="int" />
+        </EntityType>
         <EntityType Name="BalanceRequests">
           <Key>
             <PropertyRef Name="Balance_ID" />
@@ -40,6 +49,17 @@
           <Property Name="isCompoundClip" Type="bit" />
           <Property Name="Description" Type="varchar(max)" />
           <Property Name="Likes" Type="int" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Company_ID" />
+          </Key>
+          <Property Name="Company_ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar(max)" />
+          <Property Name="Email" Type="varchar(max)" />
+          <Property Name="Password" Type="varchar(max)" />
+          <Property Name="Image" Type="varchar(max)" />
+          <Property Name="Balance" Type="int" />
         </EntityType>
         <EntityType Name="DramasClips">
           <Key>
@@ -221,6 +241,7 @@
           </Key>
           <Property Name="User_ID" Type="int" Nullable="false" />
           <Property Name="Editor_ID" Type="int" />
+          <Property Name="Company_ID" Type="int" />
           <Property Name="Writer_ID" Type="int" />
           <Property Name="Reader_ID" Type="int" />
           <Property Name="Email" Type="varchar(max)" />
@@ -581,8 +602,10 @@
         </Association>
         <EntityContainer Name="BlinkMovie4ModelStoreContainer">
           <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Advertismet" EntityType="Self.Advertismet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BalanceRequests" EntityType="Self.BalanceRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Clips" EntityType="Self.Clips" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DramasClips" EntityType="Self.DramasClips" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Editor" EntityType="Self.Editor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Favorites" EntityType="Self.Favorites" Schema="dbo" store:Type="Tables" />
@@ -725,6 +748,15 @@
           <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="Advertismet">
+          <Key>
+            <PropertyRef Name="Ad_ID" />
+          </Key>
+          <Property Name="Ad_ID" Type="Int32" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Company_ID" Type="Int32" />
+          <Property Name="count" Type="Int32" />
+        </EntityType>
         <EntityType Name="BalanceRequests">
           <Key>
             <PropertyRef Name="Balance_ID" />
@@ -756,6 +788,17 @@
           <NavigationProperty Name="Movie" Relationship="Self.FK__Clips__MID__6383C8BA" FromRole="Clips" ToRole="Movie" />
           <NavigationProperty Name="Writer" Relationship="Self.FK__Clips__WID__628FA481" FromRole="Clips" ToRole="Writer" />
           <NavigationProperty Name="GetMovie" Relationship="Self.FK__GetMovie__CID__6C190EBB" FromRole="Clips" ToRole="GetMovie" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Company_ID" />
+          </Key>
+          <Property Name="Company_ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Balance" Type="Int32" />
         </EntityType>
         <EntityType Name="DramasClips">
           <Key>
@@ -976,6 +1019,7 @@
           </Key>
           <Property Name="User_ID" Type="Int32" Nullable="false" />
           <Property Name="Editor_ID" Type="Int32" />
+          <Property Name="Company_ID" Type="Int32" />
           <Property Name="Writer_ID" Type="Int32" />
           <Property Name="Reader_ID" Type="Int32" />
           <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -1349,8 +1393,10 @@
         </Association>
         <EntityContainer Name="BlinkMovie2Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admin" EntityType="Self.Admin" />
+          <EntitySet Name="Advertismet" EntityType="Self.Advertismet" />
           <EntitySet Name="BalanceRequests" EntityType="Self.BalanceRequests" />
           <EntitySet Name="Clips" EntityType="Self.Clips" />
+          <EntitySet Name="Company" EntityType="Self.Company" />
           <EntitySet Name="DramasClips" EntityType="Self.DramasClips" />
           <EntitySet Name="Editor" EntityType="Self.Editor" />
           <EntitySet Name="Favorites" EntityType="Self.Favorites" />
@@ -1495,6 +1541,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Advertismet">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Advertismet">
+              <MappingFragment StoreEntitySet="Advertismet">
+                <ScalarProperty Name="Ad_ID" ColumnName="Ad_ID" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Company_ID" ColumnName="Company_ID" />
+                <ScalarProperty Name="count" ColumnName="count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="BalanceRequests">
             <EntityTypeMapping TypeName="BlinkMovie4Model.BalanceRequests">
               <MappingFragment StoreEntitySet="BalanceRequests">
@@ -1522,6 +1578,18 @@
                 <ScalarProperty Name="isCompoundClip" ColumnName="isCompoundClip" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Likes" ColumnName="Likes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Company">
+            <EntityTypeMapping TypeName="BlinkMovie4Model.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="Company_ID" ColumnName="Company_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1718,6 +1786,7 @@
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="User_ID" ColumnName="User_ID" />
                 <ScalarProperty Name="Editor_ID" ColumnName="Editor_ID" />
+                <ScalarProperty Name="Company_ID" ColumnName="Company_ID" />
                 <ScalarProperty Name="Writer_ID" ColumnName="Writer_ID" />
                 <ScalarProperty Name="Reader_ID" ColumnName="Reader_ID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

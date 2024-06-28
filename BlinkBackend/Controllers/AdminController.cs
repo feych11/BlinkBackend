@@ -14,6 +14,17 @@ namespace BlinkBackend.Controllers
     public class AdminController : ApiController
     {
         readonly BlinkMovie2Entities db = new BlinkMovie2Entities();
+        static int GenerateId()
+        {
+
+            long timestamp = DateTime.Now.Ticks;
+            Random random = new Random();
+            int randomComponent = random.Next();
+
+            int userId = (int)(timestamp ^ randomComponent);
+
+            return Math.Abs(userId);
+        }
         [HttpPut]
         public HttpResponseMessage AcceptBalanceRequest(int id)
         {
@@ -129,6 +140,21 @@ namespace BlinkBackend.Controllers
                 b.Interest,
                 b.Balance,
                 b.Image
+            });
+            return Request.CreateResponse(HttpStatusCode.OK, Writer);
+        }
+        [HttpGet]
+        public HttpResponseMessage ShowAllComopany()
+        {
+            BlinkMovie2Entities db = new BlinkMovie2Entities();
+            var Writer = db.Company.Select(b => new
+            {
+                b.Image,
+                b.Name,
+                b.Company_ID,
+                b.Balance,
+                
+                
             });
             return Request.CreateResponse(HttpStatusCode.OK, Writer);
         }
@@ -347,5 +373,88 @@ namespace BlinkBackend.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
+
+        [HttpPost]
+        public HttpResponseMessage AddAdvertisement(int CompanyID,String List1) 
+        {
+            try { 
+                string[] add=List1.Split(',');
+                foreach(string item in add)
+                {
+                    var addAdver = new Advertismet
+                    {
+                        Ad_ID = GenerateId(),
+                        Company_ID = CompanyID,
+                        Url = item,
+                        count = 0,
+                        };
+                    db.Advertismet.Add(addAdver);
+                    db.SaveChanges();
+                }
+                return Request.CreateResponse(HttpStatusCode.OK,"Add Advertisement");
+                
+            }
+            catch (Exception ex) {
+
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+        [HttpGet]
+        public HttpResponseMessage GetRandomAdvertisement()
+        {
+
+            try { 
+                var randomAdver=db.Advertismet.OrderBy(r=>Guid.NewGuid()).FirstOrDefault();
+                
+                db.SaveChanges();
+
+                var responce = new
+                {
+                    randomAdver = randomAdver,
+                    Clips_id = GenerateId(),
+                    Starttime = 0.0,
+                    EndTime=5.0,
+                };
+                randomAdver.count = randomAdver.count + 1;
+
+                return Request.CreateResponse(HttpStatusCode.OK, responce);
+
+            }catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError,ex.Message);
+            }
+        }
+        [HttpGet]
+        public HttpResponseMessage GetCompanyData() {
+
+            try {
+                var randomAdver = db.Advertismet.Where(c => c.count >= 1).Select(s => new
+
+                {
+                    s.Company_ID,
+                    s.count,
+                    CompanyData=db.Company.Where(s1=>s1.Company_ID==s.Company_ID).Select(data=>new
+
+                    {
+                        data.Company_ID,
+                        data.Name,
+                        data.Email,
+                        s.count
+                    })
+                }).ToList();
+                db.SaveChanges();
+                var Response = new
+                {
+                    randomAdver = randomAdver,
+                    ClipsId = GenerateId(),
+
+                };
+                return Request.CreateResponse(HttpStatusCode.OK, Response);
+            }catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,ex.Message);
+            }
+        }
+
     }
 }
